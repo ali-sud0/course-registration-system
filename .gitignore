@@ -1,0 +1,15 @@
+# IDE files
+.idea/
+
+# Virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+backend/venv/
+*.env
+.env
+venv/
+.env/
+.venv/
+env/
