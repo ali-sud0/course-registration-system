@@ -27,4 +27,4 @@ class UserOut(BaseModel):
     is_suspended: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
