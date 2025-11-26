@@ -1,6 +1,6 @@
 # app/main.py
 from fastapi import FastAPI
-from app.db import engine, Base
+from app.core.db import engine, Base
 from app.routers import auth, protected
 from app.routers import course
 from fastapi.middleware.cors import CORSMiddleware

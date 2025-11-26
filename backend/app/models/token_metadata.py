@@ -1,6 +1,6 @@
 # app/models/token_metadata.py
 from sqlalchemy import Column, String, DateTime, Boolean, ForeignKey, func
-from app.db import Base
+from app.core.db import Base
 import uuid
 
 class TokenMetadata(Base):

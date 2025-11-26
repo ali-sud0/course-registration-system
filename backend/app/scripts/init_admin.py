@@ -1,11 +1,9 @@
 # app/scripts/init_admin.py
 from sqlalchemy.orm import Session
-from datetime import datetime
 import uuid
 
-from app.db import SessionLocal, Base, engine
+from app.core.db import SessionLocal, Base, engine
 from app.models.user import User, UserRole
-from app.models.token_metadata import TokenMetadata
 from app.core.security import hash_password
 
 

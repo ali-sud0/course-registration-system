@@ -1,6 +1,6 @@
 # app/models/user.py
 from sqlalchemy import Column, String, Boolean, Enum
-from app.db import Base
+from app.core.db import Base
 import uuid
 import enum
 

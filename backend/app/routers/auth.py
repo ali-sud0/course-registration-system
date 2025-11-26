@@ -1,10 +1,10 @@
 # app/routers/auth.py
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from datetime import datetime
 
 from app.schemas.auth import LoginRequest, TokenResponse, RefreshRequest
-from app.db import get_db
+from app.core.db import get_db
 from app.models.user import User
 from app.models.token_metadata import TokenMetadata
 from app.core import security
