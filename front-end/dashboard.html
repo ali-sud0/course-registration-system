@@ -1,0 +1,60 @@
+<!-- dashboard.html - داشبورد مدیر گروه با لیست دروس و امکان افزودن/حذف -->
+<!DOCTYPE html> <!-- نوع سند -->
+<html lang="fa"> <!-- زبان -->
+<head> <!-- شروع head -->
+  <meta charset="utf-8"> <!-- UTF-8 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- ریسپانسیو -->
+  <title>درسینو - داشبورد</title> <!-- عنوان -->
+  <link rel="stylesheet" href="css/style.css"> <!-- استایل -->
+</head> <!-- پایان head -->
+<body> <!-- شروع body -->
+  <div class="dashboard-layout"> <!-- لایوت کلی داشبورد -->
+    <aside class="sidebar"> <!-- سایدبار (شبیه عکس به صورت ساده) -->
+      <img src="images/logo.png" alt="لوگو" class="logo"> <!-- لوگو -->
+      <div class="brand-title">درسینو</div> <!-- عنوان -->
+      <nav class="menu"> <!-- منوی سایدبار -->
+        <a href="#" class="menu-item active">دروس</a> <!-- آیتم فعال -->
+        <a href="#" class="menu-item">اساتید</a>
+        <a href="#" class="menu-item">دانشجویان</a>
+        <a href="#" class="menu-item">تنظیمات</a>
+      </nav> <!-- پایان منو -->
+      <button id="logoutBtn" class="btn danger small">خروج</button> <!-- دکمه خروج -->
+    </aside> <!-- پایان سایدبار -->
+
+    <main class="main-content"> <!-- محتوای اصلی -->
+      <header class="main-header"> <!-- هدر محتوا -->
+        <h2>دروس</h2> <!-- عنوان اصلی -->
+        <p class="small-muted">همه جزئیات مربوط به درس‌ها را از اینجا مدیریت کنید</p> <!-- توضیح -->
+      </header> <!-- پایان هدر -->
+
+      <section class="controls"> <!-- کنترل‌ها: افزودن و فیلتر -->
+        <a href="add-course.html" class="btn primary">+ افزودن درس</a> <!-- لینک به فرم افزودن درس -->
+        <div class="filter-row"> <!-- فیلترها -->
+          <input id="filterName" type="text" placeholder="نام درس"> <!-- فیلتر نام -->
+          <input id="filterCode" type="text" placeholder="کد درس"> <!-- فیلتر کد -->
+          <button id="btnFilter" class="btn">جستجو</button> <!-- دکمه جستجو -->
+        </div> <!-- پایان filter-row -->
+      </section> <!-- پایان controls -->
+
+      <section class="table-section"> <!-- بخش جدول لیست دروس -->
+        <div class="table-head"> <!-- سرفرصت جدول -->
+          <div>نام درس</div>
+          <div>کد</div>
+          <div>استاد</div>
+          <div>گروه</div>
+          <div>ظرفیت</div>
+          <div>زمان کلاس</div>
+          <div>تاریخ امتحان</div>
+          <div>عملیات</div>
+        </div> <!-- پایان table-head -->
+
+        <div id="coursesContainer" class="table-body"> <!-- محل رندر ردیف‌ها -->
+          <!-- ردیف‌ها توسط JS اضافه می‌شوند -->
+        </div> <!-- پایان table-body -->
+      </section> <!-- پایان table-section -->
+    </main> <!-- پایان main-content -->
+  </div> <!-- پایان dashboard-layout -->
+
+  <script src="js/dashboard.js" defer></script> <!-- اسکریپت مخصوص داشبورد -->
+</body> <!-- پایان body -->
+</html> <!-- پایان سند -->
