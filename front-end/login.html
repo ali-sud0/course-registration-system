@@ -1,47 +1,40 @@
-<!-- login.html - صفحه ورود دقیقا شبیه تصویر با آیکن چشم و اعتبارسنجی -->
-<!DOCTYPE html> <!-- نوع سند -->
-<html lang="fa"> <!-- زبان فارسی -->
-<head> <!-- head شروع -->
-  <meta charset="utf-8"> <!-- UTF-8 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- ریسپانسیو -->
-  <title>درسینو - ورود</title> <!-- عنوان -->
-  <link rel="stylesheet" href="css/style.css"> <!-- استایل مشترک -->
-</head> <!-- پایان head -->
-<body> <!-- شروع body -->
-  <div class="center-wrapper"> <!-- wrapper مرکزی -->
-    <div class="card login-card"> <!-- کارت لاگین -->
-      <div class="card-header"> <!-- هدر کارت شامل لوگو و عنوان -->
-        <img src="images/logo.png" alt="لوگو" class="logo small"> <!-- جای لوگوی قابل تعویض -->
-        <div class="titles"> <!-- بسته عنوان و زیرعنوان -->
-          <div class="brand-title">درسینو</div> <!-- عنوان برنامه -->
-          <div class="subtitle">سیستم جامع انتخاب واحد</div> <!-- زیرعنوان -->
-        </div> <!-- پایان titles -->
-        <div class="version small-version">نسخه ۱.۰</div> <!-- نسخه در بالا سمت چپ -->
-      </div> <!-- پایان card-header -->
-
-      <hr class="divider"> <!-- خط جداکننده -->
-
-      <label class="field-label" for="username">نام کاربری</label> <!-- برچسب نام کاربری -->
-      <div class="input-box"> <!-- جعبه ورودی شامل آیکن -->
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zM12 14c-4 0-9 2-9 6v2h18v-2c0-4-5-6-9-6z"/></svg> <!-- آیکن کاربر -->
-        <input id="username" type="text" placeholder="نام کاربری" autocomplete="username"> <!-- فیلد نام کاربری -->
-      </div> <!-- پایان input-box -->
-
-      <label class="field-label" for="password">رمز عبور</label> <!-- برچسب رمز -->
-      <div class="input-box"> <!-- جعبه رمز شامل آیکن و دکمه چشم -->
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 8V7a5 5 0 0 0-10 0v1H5v12h14V8h-2zM9 8V7a3 3 0 0 1 6 0v1H9z"/></svg> <!-- آیکن قفل -->
-        <input id="password" type="password" placeholder="رمز عبور" autocomplete="current-password"> <!-- فیلد رمز -->
-        <button type="button" id="togglePassword" class="eye-btn" aria-label="نمایش رمز"> <!-- دکمه چشم -->
-          <svg class="eye-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg> <!-- آیکن چشم -->
-        </button> <!-- پایان دکمه چشم -->
-      </div> <!-- پایان input-box -->
-
-      <button id="loginBtn" class="btn primary full">ورود</button> <!-- دکمه ورود -->
-
-      <p id="errorText" class="error-message">نام کاربری یا رمز عبور اشتباه است</p> <!-- متن خطا -->
-    </div> <!-- پایان login-card -->
-  </div> <!-- پایان wrapper -->
-
-  <script src="js/login.js" defer></script> <!-- اسکریپت مخصوص لاگین -->
-</body> <!-- پایان body -->
-</html> <!-- پایان سند -->
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>درسینو - ورود</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="center-wrapper">
+    <div class="card login-card">
+      <div class="card-header">
+        <img src="images/logo.png" alt="لوگو" class="logo small">
+        <div class="titles">
+          <div class="brand-title">درسینو</div>
+          <div class="subtitle">سیستم جامع انتخاب واحد</div>
+        </div>
+        <div class="version small-version">نسخه ۱.۰</div>
+      </div>
+      <hr class="divider">
+      <label class="field-label" for="username">نام کاربری</label>
+      <div class="input-box">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zM12 14c-4 0-9 2-9 6v2h18v-2c0-4-5-6-9-6z"/></svg>
+        <input id="username" type="text" placeholder="نام کاربری" autocomplete="username">
+      </div>
+      <label class="field-label" for="password">رمز عبور</label>
+      <div class="input-box">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M17 8V7a5 5 0 0 0-10 0v1H5v12h14V8h-2zM9 8V7a3 3 0 0 1 6 0v1H9z"/></svg>
+        <input id="password" type="password" placeholder="رمز عبور" autocomplete="current-password">
+        <button type="button" id="togglePassword" class="eye-btn" aria-label="نمایش رمز">
+          <svg class="eye-icon" viewBox="0 0 24 24"><path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
+        </button>
+      </div>
+      <button id="loginBtn" class="btn primary full">ورود</button>
+      <p id="errorText" class="error-message">نام کاربری یا رمز عبور اشتباه است</p>
+    </div>
+  </div>
+  <script src="js/login.js" defer></script>
+</body>
+</html>

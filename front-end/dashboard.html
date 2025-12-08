@@ -1,43 +1,42 @@
-<!-- dashboard.html - داشبورد مدیر گروه با لیست دروس و امکان افزودن/حذف -->
-<!DOCTYPE html> <!-- نوع سند -->
-<html lang="fa"> <!-- زبان -->
-<head> <!-- شروع head -->
-  <meta charset="utf-8"> <!-- UTF-8 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- ریسپانسیو -->
-  <title>درسینو - داشبورد</title> <!-- عنوان -->
-  <link rel="stylesheet" href="css/style.css"> <!-- استایل -->
-</head> <!-- پایان head -->
-<body> <!-- شروع body -->
-  <div class="dashboard-layout"> <!-- لایوت کلی داشبورد -->
-    <aside class="sidebar"> <!-- سایدبار (شبیه عکس به صورت ساده) -->
-      <img src="images/logo.png" alt="لوگو" class="logo"> <!-- لوگو -->
-      <div class="brand-title">درسینو</div> <!-- عنوان -->
-      <nav class="menu"> <!-- منوی سایدبار -->
-        <a href="#" class="menu-item active">دروس</a> <!-- آیتم فعال -->
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>درسینو - داشبورد</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <img src="images/logo.png" alt="لوگو" class="logo">
+      <div class="brand-title">درسینو</div>
+      <nav class="menu">
+        <a href="#" class="menu-item active">دروس</a>
         <a href="#" class="menu-item">اساتید</a>
         <a href="#" class="menu-item">دانشجویان</a>
         <a href="#" class="menu-item">تنظیمات</a>
-      </nav> <!-- پایان منو -->
-      <button id="logoutBtn" class="btn danger small">خروج</button> <!-- دکمه خروج -->
-    </aside> <!-- پایان سایدبار -->
+      </nav>
+      <button id="logoutBtn" class="btn danger small">خروج</button>
+    </aside>
 
-    <main class="main-content"> <!-- محتوای اصلی -->
-      <header class="main-header"> <!-- هدر محتوا -->
-        <h2>دروس</h2> <!-- عنوان اصلی -->
-        <p class="small-muted">همه جزئیات مربوط به درس‌ها را از اینجا مدیریت کنید</p> <!-- توضیح -->
-      </header> <!-- پایان هدر -->
+    <main class="main-content">
+      <header class="main-header">
+        <h2>دروس</h2>
+        <p class="small-muted">همه جزئیات مربوط به درس‌ها را از اینجا مدیریت کنید</p>
+      </header>
 
-      <section class="controls"> <!-- کنترل‌ها: افزودن و فیلتر -->
-        <a href="add-course.html" class="btn primary">+ افزودن درس</a> <!-- لینک به فرم افزودن درس -->
-        <div class="filter-row"> <!-- فیلترها -->
-          <input id="filterName" type="text" placeholder="نام درس"> <!-- فیلتر نام -->
-          <input id="filterCode" type="text" placeholder="کد درس"> <!-- فیلتر کد -->
-          <button id="btnFilter" class="btn">جستجو</button> <!-- دکمه جستجو -->
-        </div> <!-- پایان filter-row -->
-      </section> <!-- پایان controls -->
+      <section class="controls">
+        <button class="btn primary" id="openAddCourseModal">+ افزودن درس</button>
+        <div class="filter-row">
+          <input id="filterName" type="text" placeholder="نام درس">
+          <input id="filterCode" type="text" placeholder="کد درس">
+          <button id="btnFilter" class="btn">جستجو</button>
+        </div>
+      </section>
 
-      <section class="table-section"> <!-- بخش جدول لیست دروس -->
-        <div class="table-head"> <!-- سرفرصت جدول -->
+      <section class="table-section">
+        <div class="table-head">
           <div>نام درس</div>
           <div>کد</div>
           <div>استاد</div>
@@ -46,15 +45,51 @@
           <div>زمان کلاس</div>
           <div>تاریخ امتحان</div>
           <div>عملیات</div>
-        </div> <!-- پایان table-head -->
+        </div>
+        <div id="coursesContainer" class="table-body"></div>
+      </section>
+    </main>
+  </div>
 
-        <div id="coursesContainer" class="table-body"> <!-- محل رندر ردیف‌ها -->
-          <!-- ردیف‌ها توسط JS اضافه می‌شوند -->
-        </div> <!-- پایان table-body -->
-      </section> <!-- پایان table-section -->
-    </main> <!-- پایان main-content -->
-  </div> <!-- پایان dashboard-layout -->
+  <!-- مودال افزودن درس -->
+  <div id="addCourseModal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h3>افزودن درس جدید</h3>
+      <form id="addCourseForm" class="course-form">
+        <label>نام درس</label>
+        <input id="c-name" type="text" placeholder="نام درس" required>
 
-  <script src="js/dashboard.js" defer></script> <!-- اسکریپت مخصوص داشبورد -->
-</body> <!-- پایان body -->
-</html> <!-- پایان سند -->
+        <label>کد درس</label>
+        <input id="c-code" type="text" placeholder="کد درس" required>
+
+        <label>استاد</label>
+        <select id="c-teacher">
+          <option value="">انتخاب استاد</option>
+          <option value="ادیب‌فر">مهندس ادیب‌فر</option>
+          <option value="دکتر حسینی">دکتر حسینی</option>
+        </select>
+
+        <label>گروه</label>
+        <input id="c-group" type="text" placeholder="گروه" required>
+
+        <label>ظرفیت</label>
+        <input id="c-cap" type="number" placeholder="ظرفیت" required>
+
+        <label>زمان کلاس</label>
+        <input id="c-time" type="date">
+
+        <label>تاریخ امتحان</label>
+        <input id="c-exam" type="date">
+
+        <div class="form-actions">
+          <button type="submit" class="btn primary">ذخیره</button>
+          <button type="button" class="btn secondary" id="cancelModal">انصراف</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/dashboard.js" defer></script>
+</body>
+</html>

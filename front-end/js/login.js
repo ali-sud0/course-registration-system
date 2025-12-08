@@ -1,70 +1,79 @@
-// js/login.js - منطق صفحه لاگین
-
 // گرفتن ارجاعات به عناصر صفحه
-const loginBtn = document.getElementById('loginBtn'); // دکمه ورود
-const usernameInput = document.getElementById('username'); // فیلد نام کاربری
-const passwordInput = document.getElementById('password'); // فیلد رمز
-const errorText = document.getElementById('errorText'); // پاراگراف پیام خطا
-const togglePassword = document.getElementById('togglePassword'); // دکمه چشم
+const loginBtn = document.getElementById('loginBtn');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const errorText = document.getElementById('errorText');
+const togglePassword = document.getElementById('togglePassword');
 
-// اطلاعات ورود تستی (هاردکد) - می‌تونی تغییرش بدی
-const ADMIN_USER = 'admin'; // نام کاربری تستی
-const ADMIN_PASS = '1234'; // رمز عبور تستی
+const USE_LOCAL = true; // اگر true باشه، ورود لوکال است؛ اگر false، ورود به سرور
+const BASE_URL = 'https://your-server.com/api'; // آدرس سرور واقعی
 
-// تابع نمایش/مخفی‌سازی رمز
-if (togglePassword) { // اگر عنصر چشم وجود داشت
-  togglePassword.addEventListener('click', function () { // افزودن رویداد کلیک
-    if (passwordInput.type === 'password') { // اگر الان پنهان است
-      passwordInput.type = 'text'; // نمایش رمز
-    } else { // در غیر اینصورت
-      passwordInput.type = 'password'; // مخفی کردن رمز
-    }
+// داده های لوکال تستی
+const LOCAL_USER = { username: 'admin', password: '1234' };
+
+// نمایش/مخفی کردن رمز
+if (togglePassword) {
+  togglePassword.addEventListener('click', () => {
+    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
   });
 }
 
-// تابع اعتبارسنجی و ورود
-if (loginBtn) { // اگر دکمه ورود وجود داشت
-  loginBtn.addEventListener('click', function () { // رویداد کلیک
-    // برداشتن حالت خطا از فیلدها
-    usernameInput.classList.remove('error'); // حذف کلاس خطا از نام کاربری
-    passwordInput.classList.remove('error'); // حذف کلاس خطا از رمز
-    errorText.style.display = 'none'; // مخفی کردن پیام خطا
+// تابع نمایش پیام خطا
+function showError(msg) {
+  errorText.textContent = msg;
+  errorText.style.display = 'block';
+  usernameInput.classList.add('error');
+  passwordInput.classList.add('error');
+}
 
-    // خواندن مقادیر ورودی و trim کردن
-    const username = usernameInput.value.trim(); // مقدار نام کاربری
-    const password = passwordInput.value.trim(); // مقدار رمز
+// تابع ورود
+if (loginBtn) {
+  loginBtn.addEventListener('click', async () => {
+    usernameInput.classList.remove('error');
+    passwordInput.classList.remove('error');
+    errorText.style.display = 'none';
 
-    let hasError = false; // فلگ خطا
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
 
-    // اگر نام کاربری خالی بود
-    if (!username) {
-      usernameInput.classList.add('error'); // اضافه کردن کلاس خطا
-      hasError = true; // نشان دادن وجود خطا
+    if (!username || !password) {
+      showError('نام کاربری و رمز عبور الزامی است');
+      return;
     }
 
-    // اگر رمز خالی بود
-    if (!password) {
-      passwordInput.classList.add('error'); // اضافه کردن کلاس خطا
-      hasError = true; // علامت خطا
+    // --------- ورود لوکال --------- //
+    if (USE_LOCAL) {
+      if (username === LOCAL_USER.username && password === LOCAL_USER.password) {
+        localStorage.setItem('accessToken', 'local-token'); // توکن ساختگی لوکال
+        window.location.href = 'dashboard.html';
+      } else {
+        showError('نام کاربری یا رمز عبور اشتباه است');
+      }
+      return;
     }
 
-    // اگر خطا وجود داشت، پیغام خطا را نشان بده و برگرد
-    if (hasError) {
-      errorText.textContent = 'نام کاربری یا رمز عبور اشتباه است'; // متن خطا
-      errorText.style.display = 'block'; // نمایش پیام
-      return; // خروج از تابع
-    }
+    // --------- ورود واقعی با API --------- //
+    try {
+      const response = await fetch(`${BASE_URL}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
 
-    // بررسی اعتبار با مقادیر هاردکد شده
-    if (username === ADMIN_USER && password === ADMIN_PASS) {
-      // اگر درست بود به داشبورد هدایت شو
-      window.location.href = 'dashboard.html'; // ریدایرکت به داشبورد
-    } else {
-      // اگر نادرست بود، نمایش پیام خطا و هایلایت فیلدها
-      usernameInput.classList.add('error'); // اضافه کردن کلاس خطا
-      passwordInput.classList.add('error'); // اضافه کردن کلاس خطا
-      errorText.textContent = 'نام کاربری یا رمز اشتباه است'; // متن خطا
-      errorText.style.display = 'block'; // نمایش پیام
+      const data = await response.json();
+
+      if (response.status === 200) {
+        // ورود موفق، ذخیره JWT و هدایت
+        localStorage.setItem('accessToken', data.token);
+        window.location.href = 'dashboard.html';
+      } else if (response.status === 401) {
+        showError(data.message || 'نام کاربری یا رمز عبور اشتباه است');
+      } else {
+        showError(data.message || 'مشکلی پیش آمد، دوباره تلاش کنید');
+      }
+    } catch (err) {
+      console.error(err);
+      showError('خطای شبکه، لطفاً اتصال اینترنت را بررسی کنید');
     }
   });
 }
