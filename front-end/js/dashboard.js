@@ -1,28 +1,37 @@
-// js/dashboard.js - مدیریت لیست دروس در داشبورد
+// بارگذاری اولیه دروس از localStorage
+let courses = JSON.parse(localStorage.getItem('courses_data')) || [];
 
-// نمونه داده اولیه (شبیه عکس) - می‌توانی این را تغییر دهی یا از API بارگذاری کنی
-let courses = [ // آرایه‌ی دروس نمونه
-  { name: 'آنالیز ۱', code: 'MAT101', teacher: 'دکتر حسینی', group: 'A', capacity: 30, time: 'یکشنبه ۸-۱۰', exam: '1404/12/01 - 09:00' },
-  { name: 'برنامه‌سازی پیشرفته', code: 'CS202', teacher: 'مهندس ادیب‌فر', group: 'B', capacity: 40, time: 'دوشنبه ۱۰-۱۲', exam: '1404/12/05 - 14:00' }
-];
+// ارجاع به عناصر DOM
+const coursesContainer = document.getElementById('coursesContainer');
+const logoutBtn = document.getElementById('logoutBtn');
+const btnFilter = document.getElementById('btnFilter');
+const filterName = document.getElementById('filterName');
+const filterCode = document.getElementById('filterCode');
 
-// گرفتن ارجاعات به DOM
-const coursesContainer = document.getElementById('coursesContainer'); // ظرف نمایش ردیف‌ها
-const logoutBtn = document.getElementById('logoutBtn'); // دکمه خروج
-const btnFilter = document.getElementById('btnFilter'); // دکمه فیلتر
-const filterName = document.getElementById('filterName'); // فیلتر نام
-const filterCode = document.getElementById('filterCode'); // فیلتر کد
+// مودال و فرم افزودن درس
+const addCourseBtn = document.getElementById('openAddCourseModal');
+const addCourseModal = document.getElementById('addCourseModal');
+const closeModal = document.getElementById('closeModal');
+const cancelModal = document.getElementById('cancelModal');
+const addCourseForm = document.getElementById('addCourseForm');
+const cName = document.getElementById('c-name');
+const cCode = document.getElementById('c-code');
+const cTeacher = document.getElementById('c-teacher');
+const cGroup = document.getElementById('c-group');
+const cCap = document.getElementById('c-cap');
+const cTime = document.getElementById('c-time');
+const cExam = document.getElementById('c-exam');
 
-// تابع رندر لیست دروس
-function renderCourses(list = courses) { // لیست پیش‌فرض آرایه courses
-  // پاک کردن محتوا
-  coursesContainer.innerHTML = ''; // حذف محتوای قبلی
-  // برای هر درس یک ردیف بساز و اضافه کن
-  list.forEach((c, idx) => { // پیمایش آرایه
-    // ساخت عنصر ردیف
-    const row = document.createElement('div'); // ایجاد div
-    row.className = 'course-row'; // کلاس برای استایل
-    // داخل ردیف محتوا را قرار می‌دهیم (شبکه‌ای مطابق CSS)
+const BASE_URL = 'https://your-server.com/api'; // آدرس سرور واقعی
+
+// ---------- توابع ---------- //
+
+// رندر لیست دروس
+function renderCourses(list = courses) {
+  coursesContainer.innerHTML = '';
+  list.forEach((c, idx) => {
+    const row = document.createElement('div');
+    row.className = 'course-row';
     row.innerHTML = `
       <div>${c.name}</div>
       <div>${c.code}</div>
@@ -35,67 +44,119 @@ function renderCourses(list = courses) { // لیست پیش‌فرض آرایه 
         <button class="small-btn edit-btn" onclick="openEdit(${idx})">ویرایش</button>
         <button class="small-btn remove-btn" onclick="removeCourse(${idx})">حذف</button>
       </div>
-    `; // پایان innerHTML
-    // افزودن ردیف به کانتینر
-    coursesContainer.appendChild(row); // اضافه کردن به DOM
-  }); // پایان forEach
-} // پایان تابع renderCourses
+    `;
+    coursesContainer.appendChild(row);
+  });
+}
 
-// تابع حذف درس بر اساس ایندکس
+// حذف درس
 function removeCourse(index) {
-  // تایید حذف از کاربر
-  const ok = confirm('آیا از حذف این درس مطمئن هستید؟'); // سوال تاییدی
-  if (!ok) return; // اگر کاربر انصراف داد، خروج
-  courses.splice(index, 1); // حذف از آرایه
-  renderCourses(); // رندر مجدد لیست
+  if (!confirm('آیا از حذف این درس مطمئن هستید؟')) return;
+  courses.splice(index, 1);
+  localStorage.setItem('courses_data', JSON.stringify(courses));
+  renderCourses();
 }
 
-// تابع باز کردن فرم ویرایش (پاپ‌آپ ساده با prompt برای نمونه)
+// ویرایش درس (تمام فیلدها)
 function openEdit(index) {
-  // گرفتن درس مورد نظر
-  const course = courses[index]; // درس از آرایه
-  // گرفتن مقادیر جدید توسط prompt (برای نمونه سریع)
-  const newName = prompt('نام درس را ویرایش کنید:', course.name); // ویرایش نام
-  if (newName === null) return; // اگر کاربر لغو کرد
-  const newCode = prompt('کد درس را ویرایش کنید:', course.code); // ویرایش کد
-  if (newCode === null) return; // لغو
-  // اعمال تغییرات ساده
-  course.name = newName.trim() || course.name; // به‌روزرسانی نام
-  course.code = newCode.trim() || course.code; // به‌روزرسانی کد
-  // رندر مجدد لیست
-  renderCourses(); // نمایش تغییرات
+  const course = courses[index];
+  const newName = prompt('نام درس:', course.name);
+  if (newName === null) return;
+  const newCode = prompt('کد درس:', course.code);
+  if (newCode === null) return;
+  const newTeacher = prompt('استاد:', course.teacher);
+  if (newTeacher === null) return;
+  const newGroup = prompt('گروه:', course.group);
+  if (newGroup === null) return;
+  const newCap = prompt('ظرفیت:', course.capacity);
+  if (newCap === null) return;
+  const newTime = prompt('زمان کلاس (تاریخ):', course.time);
+  if (newTime === null) return;
+  const newExam = prompt('تاریخ امتحان:', course.exam);
+  if (newExam === null) return;
+
+  course.name = newName.trim();
+  course.code = newCode.trim();
+  course.teacher = newTeacher.trim();
+  course.group = newGroup.trim();
+  course.capacity = parseInt(newCap, 10) || course.capacity;
+  course.time = newTime.trim();
+  course.exam = newExam.trim();
+
+  localStorage.setItem('courses_data', JSON.stringify(courses));
+  renderCourses();
 }
 
-// تابع فیلتر کردن لیست بر اساس فیلدها
+// فیلتر لیست
 function applyFilter() {
-  // خواندن مقادیر فیلتر
-  const nameQ = filterName.value.trim().toLowerCase(); // کوئری نام
-  const codeQ = filterCode.value.trim().toLowerCase(); // کوئری کد
-  // فیلتر آرایه
+  const nameQ = filterName.value.trim().toLowerCase();
+  const codeQ = filterCode.value.trim().toLowerCase();
   const filtered = courses.filter(c => {
-    // بررسی نام و کد (اگر فیلتر خالی باشد نادیده گرفته می‌شود)
-    const matchName = nameQ ? c.name.toLowerCase().includes(nameQ) : true; // شرط نام
-    const matchCode = codeQ ? c.code.toLowerCase().includes(codeQ) : true; // شرط کد
-    return matchName && matchCode; // هر دو شرط برقرار باشد
+    const matchName = nameQ ? c.name.toLowerCase().includes(nameQ) : true;
+    const matchCode = codeQ ? c.code.toLowerCase().includes(codeQ) : true;
+    return matchName && matchCode;
   });
-  // رندر لیست فیلتر شده
-  renderCourses(filtered); // نمایش نتایج
+  renderCourses(filtered);
 }
 
-// تابع logout ساده (هدایت به index)
-if (logoutBtn) { // اگر دکمه خروج وجود داشت
-  logoutBtn.addEventListener('click', function () { // رویداد کلیک
-    // در اینجا می‌توان session را پاک کرد، فعلاً هدایت
-    window.location.href = 'index.html'; // بازگشت به صفحه اول
+// ---------- مودال ---------- //
+if (addCourseBtn) {
+  addCourseBtn.addEventListener('click', () => addCourseModal.style.display = 'block');
+}
+if (closeModal) closeModal.addEventListener('click', () => addCourseModal.style.display = 'none');
+if (cancelModal) cancelModal.addEventListener('click', () => addCourseModal.style.display = 'none');
+window.addEventListener('click', e => { if (e.target === addCourseModal) addCourseModal.style.display = 'none'; });
+
+// ---------- افزودن درس ---------- //
+if (addCourseForm) {
+  addCourseForm.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const newCourse = {
+      name: cName.value.trim(),
+      code: cCode.value.trim(),
+      teacher: cTeacher.value,
+      group: cGroup.value.trim(),
+      capacity: parseInt(cCap.value, 10) || 0,
+      time: cTime.value,
+      exam: cExam.value
+    };
+
+    if (!newCourse.name || !newCourse.code) {
+      alert('نام درس و کد الزامی است.');
+      return;
+    }
+
+    // ذخیره در localStorage
+    courses.push(newCourse);
+    localStorage.setItem('courses_data', JSON.stringify(courses));
+    renderCourses();
+    addCourseModal.style.display = 'none';
+    addCourseForm.reset();
+
+    // ارسال به سرور (اختیاری)
+    try {
+      const response = await fetch(`${BASE_URL}/courses`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newCourse)
+      });
+      if (!response.ok) console.warn('ارسال به سرور موفق نبود');
+    } catch (err) {
+      console.error('خطای شبکه:', err);
+    }
   });
 }
 
-// وصل کردن رویداد جستجو
-if (btnFilter) {
-  btnFilter.addEventListener('click', applyFilter); // کلیک جستجو
-}
+// ---------- خروج ---------- //
+if (logoutBtn) logoutBtn.addEventListener('click', () => window.location.href = 'index.html');
 
-// بارگذاری اولیه: رندر دروس نمونه
-document.addEventListener('DOMContentLoaded', function () { // وقتی صفحه کامل بارگذاری شد
-  renderCourses(); // رندر اولیه
-});
+// ---------- جستجو ---------- //
+if (btnFilter) btnFilter.addEventListener('click', applyFilter);
+
+// ---------- بارگذاری اولیه ---------- //
+document.addEventListener('DOMContentLoaded', () => renderCourses());
+
+// تابع ها باید گلوبال باشند برای onclick inline
+window.openEdit = openEdit;
+window.removeCourse = removeCourse;

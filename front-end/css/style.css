@@ -1,107 +1,57 @@
-/* css/style.css - استایل مشترک همه صفحات */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin:0; padding:0; font-family:'IRANSans',Tahoma,sans-serif; background:#EAEFFF; direction:rtl; }
+.center-wrapper { width:100%; max-width:920px; margin:0 auto; padding:20px; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+.card { background:#fff; border-radius:16px; padding:24px; box-shadow:0 8px 30px rgba(2,6,23,0.06); width:100%; max-width:420px; }
+.logo { width:56px; height:56px; object-fit:contain; display:inline-block; }
+.logo.small { width:48px; height:48px; }
+.brand-title { font-size:20px; font-weight:800; color:#111827; margin:8px 0; }
+.version, .small-version { font-size:12px; color:#9CA3AF; }
+.btn-row { display:flex; gap:12px; justify-content:center; margin-top:16px; }
+.btn { display:inline-block; padding:10px 14px; border-radius:12px; text-decoration:none; text-align:center; font-weight:600; cursor:pointer; border:none; }
+.btn.primary, button.btn.primary { background:#3f39e8; color:#fff; }
+.btn.secondary, button.btn.secondary { background:#fff; color:#111827; border:1px solid #E6E9F8; }
+.btn.danger, button.btn.danger { background:#ff4d4f; color:#fff; }
+.start-card { text-align:center; }
+.divider { border:none; height:1px; background:#EEF2FF; margin:12px 0 18px 0; }
+.field-label { display:block; font-size:14px; color:#374151; margin-bottom:6px; }
+.input-box { position: relative; margin-bottom: 14px; }
+.input-box .icon { position:absolute; right:12px; top:50%; transform:translateY(-50%); width:20px; height:20px; fill:#9CA3AF; }
+.eye-btn { position:absolute; left:10px; top:50%; transform:translateY(-50%); background:transparent; border:none; padding:6px; cursor:pointer; }
+.eye-icon { width:22px; height:22px; fill:#374151; }
+input[type="text"], input[type="password"], input[type="number"], select, input[type="date"] { width:100%; padding:12px 44px 12px 44px; border-radius:12px; border:2px solid #EEF2FF; font-size:14px; outline:none; transition:border-color 0.2s ease; }
+input.error { border-color:#ff4d4f !important; }
+.error-message { color:#ff4d4f; display:none; margin-top:12px; text-align:center; }
+.dashboard-layout { display:flex; gap:24px; align-items:flex-start; padding:24px; max-width:1200px; margin:32px auto; }
+.sidebar { width:220px; background:#fff; border-radius:12px; padding:18px; box-shadow:0 8px 24px rgba(2,6,23,0.04); display:flex; flex-direction:column; align-items:flex-start; gap:12px; }
+.menu { display:flex; flex-direction:column; gap:8px; width:100%; }
+.menu-item { padding:8px 12px; border-radius:8px; color:#374151; text-decoration:none; display:block; }
+.menu-item.active { background:#EEF2FF; font-weight:700; }
+.main-content { flex:1; }
+.main-header { margin-bottom:16px; }
+.main-header h2 { margin:0; font-size:20px; }
+.small-muted { color:#6B7280; font-size:13px; margin-top:6px; }
+.controls { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+.filter-row { display:flex; gap:8px; align-items:center; }
+.filter-row input { padding:8px 10px; width:150px; }
+.table-section { background:#fff; border-radius:12px; padding:12px; box-shadow:0 6px 18px rgba(2,6,23,0.04); }
+.table-head { display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.5fr 1.5fr 0.8fr; gap:8px; font-weight:700; padding:8px 12px; border-bottom:1px solid #EEF2FF; }
+.table-body { display:flex; flex-direction:column; gap:10px; padding:12px; }
+.course-row { display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.5fr 1.5fr 0.8fr; gap:8px; align-items:center; background:#F8FAFF; padding:10px; border-radius:10px; }
+.course-actions { display:flex; gap:8px; justify-content:flex-end; }
+.small-btn { padding:6px 8px; border-radius:8px; border:none; cursor:pointer; font-size:13px; }
+.edit-btn { background:#3f39e8; color:#fff; }
+.remove-btn { background:#ff4d4f; color:#fff; }
+.add-card .course-form { display:flex; flex-direction:column; gap:10px; }
+.add-card .form-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:8px; }
 
-/* مدل باکس برای همه عناصر */ 
-* { box-sizing: border-box; } /* تنظیم box-sizing برای کنترل padding و border */
+/* مودال افزودن درس */
+.modal { display:none; position:fixed; z-index:999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5); }
+.modal-content { background-color:#fff; margin:80px auto; padding:20px; border-radius:12px; width:400px; max-width:90%; position:relative; box-shadow:0 8px 30px rgba(2,6,23,0.06); }
+.close { position:absolute; top:12px; left:16px; font-size:24px; font-weight:bold; cursor:pointer; }
 
-/* استایل پایه بدنه */ 
-html, body { height: 100%; } /* ارتفاع ۱۰۰٪ برای مرکزچینی */ 
-body { margin: 0; padding: 0; font-family: 'IRANSans', Tahoma, sans-serif; background: #EAEFFF; direction: rtl; } /* تنظیم فونت، پس‌زمینه، راست‌چین */
-
-/* wrapper مرکزی برای صفحات ساده */ 
-.center-wrapper { width: 100%; max-width: 920px; margin: 0 auto; padding: 20px; display:flex; justify-content:center; align-items:center; min-height:100vh; } /* مرکز چین کردن عمودی و افقی */
-
-/* کارت عمومی سفید */ 
-.card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 8px 30px rgba(2,6,23,0.06); width: 100%; max-width: 420px; } /* کارت سفید با سایه */
-
-/* لوگو */ 
-.logo { width: 56px; height: 56px; object-fit: contain; display:inline-block; } /* ابعاد و نسبت لوگو */ 
-.logo.small { width:48px; height:48px; } /* اندازه کوچک برای مکان‌های دیگر */
-
-/* عنوان برند */ 
-.brand-title { font-size: 20px; font-weight: 800; color: #111827; margin: 8px 0; } /* نام اپ */ 
-
-/* نسخه */ 
-.version, .small-version { font-size: 12px; color: #9CA3AF; } /* متن نسخه */
-
-/* ردیف دکمه‌ها در index */ 
-.btn-row { display:flex; gap:12px; justify-content:center; margin-top:16px; } /* فاصله بین دکمه‌ها */
-
-/* دکمه‌ها */ 
-.btn { display:inline-block; padding: 10px 14px; border-radius: 12px; text-decoration:none; text-align:center; font-weight:600; cursor:pointer; border: none; } /* استایل پایه دکمه */ 
-.btn.primary, button.btn.primary { background: #3f39e8; color: #fff; } /* دکمه آبی */ 
-.btn.secondary, button.btn.secondary { background: #fff; color: #111827; border: 1px solid #E6E9F8; } /* دکمه ثانویه */ 
-.btn.danger, button.btn.danger { background: #ff4d4f; color: #fff; } /* دکمه قرمز */
-
-/* کارت مخصوص صفحه شروع */ 
-.start-card { text-align: center; } /* مرکز چین درون کارت */
-
-/* Divider خط */ 
-.divider { border: none; height: 1px; background: #EEF2FF; margin: 12px 0 18px 0; } /* خط جداکننده */
-
-/* برچسب فیلد */ 
-.field-label { display:block; font-size:14px; color:#374151; margin-bottom:6px; } /* برچسب هر فیلد */
-
-/* جعبه ورودی کلی */ 
-.input-box { position: relative; margin-bottom: 14px; } /* موقعیت‌دهی نسبی برای آیکن‌ها */
-
-/* آیکن درون ورودی */ 
-.input-box .icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width:20px; height:20px; fill:#9CA3AF; } /* آیکن داخل ورودی */
-
-/* دکمه چشم در سمت چپ */ 
-.eye-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; padding: 6px; cursor: pointer; } /* دکمه چشم */
-
-/* آیکن چشم */ 
-.eye-icon { width: 22px; height: 22px; fill:#374151; } /* اندازه و رنگ آیکن چشم */
-
-/* فیلدهای متن */ 
-input[type="text"], input[type="password"], select { width: 100%; padding: 12px 44px 12px 44px; border-radius: 12px; border: 2px solid #EEF2FF; font-size: 14px; outline: none; transition: border-color 0.2s ease; } /* استایل ورودی‌ها */
-
-/* کلاس خطا برای ورودی */ 
-input.error { border-color: #ff4d4f !important; } /* حاشیه قرمز در حالت خطا */
-
-/* پیام خطا */ 
-.error-message { color: #ff4d4f; display: none; margin-top: 12px; text-align:center; } /* پیام خطای پنهان که هنگام خطا نمایش داده می‌شود */
-
-/* استایل کلی داشبورد */ 
-.dashboard-layout { display:flex; gap:24px; align-items:flex-start; padding: 24px; max-width:1200px; margin:32px auto; } /* لایه بندی داشبورد */
-
-/* سایدبار */ 
-.sidebar { width: 220px; background:#fff; border-radius:12px; padding:18px; box-shadow: 0 8px 24px rgba(2,6,23,0.04); display:flex; flex-direction:column; align-items:flex-start; gap:12px; } /* کارت سایدبار */
-
-/* منو */ 
-.menu { display:flex; flex-direction:column; gap:8px; width:100%; } /* ستون منو */ 
-.menu-item { padding:8px 12px; border-radius:8px; color:#374151; text-decoration:none; display:block; } /* آیتم منو */ 
-.menu-item.active { background:#EEF2FF; font-weight:700; } /* آیتم فعال */
-
-/* محتوای اصلی */ 
-.main-content { flex:1; } /* گرفتن فضای بقیه */ 
-.main-header { margin-bottom:16px; } /* هدر محتوا */ 
-.main-header h2 { margin:0; font-size:20px; } /* عنوان */ 
-.small-muted { color:#6B7280; font-size:13px; margin-top:6px; } /* متن توصیفی */
-
-/* کنترل‌ها - افزودن و فیلتر */ 
-.controls { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; } /* ردیف کنترل‌ها */ 
-.filter-row { display:flex; gap:8px; align-items:center; } /* ردیف فیلترها */ 
-.filter-row input { padding:8px 10px; width:150px; } /* استایل فیلترها */
-
-/* جدول لیست */ 
-.table-section { background:#fff; border-radius:12px; padding:12px; box-shadow: 0 6px 18px rgba(2,6,23,0.04); } /* اطراف جدول */ 
-.table-head { display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.5fr 1.5fr 0.8fr; gap:8px; font-weight:700; padding:8px 12px; border-bottom:1px solid #EEF2FF; } /* سطر عنوان جدول */ 
-.table-body { display:flex; flex-direction:column; gap:10px; padding:12px; } /* بدنه جدول */ 
-.course-row { display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.5fr 1.5fr 0.8fr; gap:8px; align-items:center; background:#F8FAFF; padding:10px; border-radius:10px; } /* ردیف هر درس */ 
-.course-actions { display:flex; gap:8px; justify-content:flex-end; } /* ستون عملیات */ 
-.small-btn { padding:6px 8px; border-radius:8px; border:none; cursor:pointer; font-size:13px; } /* دکمه کوچک */ 
-.edit-btn { background:#3f39e8; color:#fff; } /* ویرایش */ 
-.remove-btn { background:#ff4d4f; color:#fff; } /* حذف */
-
-/* فرم افزودن درس داخل add-course (کارت) */ 
-.add-card .course-form { display:flex; flex-direction:column; gap:10px; } /* ستون فرم */ 
-.add-card .form-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:8px; } /* ردیف دکمه‌ها */
-
-/* واکنش‌گرایی */ 
 @media (max-width: 900px) { 
-  .dashboard-layout { flex-direction:column; padding:12px; } /* تبدیل به ستون در موبایل */ 
-  .sidebar { width:100%; flex-direction:row; justify-content:space-between; align-items:center; } /* سایدبار افقی */ 
-  .table-head, .course-row { grid-template-columns: 1fr 1fr 1fr; grid-auto-rows: auto; } /* ساده‌سازی جدول */ 
-  .filter-row { flex-wrap:wrap; } /* پیچیدن فیلترها */ 
-} 
+  .dashboard-layout { flex-direction:column; padding:12px; } 
+  .sidebar { width:100%; flex-direction:row; justify-content:space-between; align-items:center; } 
+  .table-head, .course-row { grid-template-columns: 1fr 1fr 1fr; grid-auto-rows:auto; } 
+  .filter-row { flex-wrap:wrap; } 
+}
