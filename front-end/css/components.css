@@ -1,0 +1,137 @@
+/* ---------------- BUTTONS ---------------- */
+
+.btn-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.btn {
+    width: max-content;
+    display: flex;
+    height: 40px;
+    padding: 16px 0px;
+    border-radius: 12px;
+    text-decoration: none;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-family: "YekanBakh";
+    cursor: pointer;
+    border: none;
+}
+
+.btn.primary,
+button.btn.primary {
+    background-color: var(--color-primary-700);
+    color: #fff;
+    padding: 0px 16px;
+    gap: 6px;
+}
+
+.btn.secondary,
+button.btn.secondary {
+    background: #fff;
+    color: #111827;
+    border: 1px solid var(--color-border);
+    padding: 0px 16px;
+    gap: 6px;
+}
+
+.btn.danger,
+button.btn.danger {
+    background: #ff4d4f;
+    color: #fff;
+}
+
+.btn.primary:hover {
+    background-color: var(--color-primary-900);
+}
+
+/* ---------------- INPUTS ---------------- */
+
+.field-label {
+    display: block;
+    font-size: 14px;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+}
+
+.input-box {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.input-box .icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.eye-btn {
+    position: absolute;
+    left: 10px;
+    top: 53%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+}
+
+.eye-icon {
+    width: 16px;
+    height: 16px;
+}
+
+#eyeVisible {
+    display: none;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 12px 36px;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    font-size: 14px;
+    font-family: "YekanBakh";
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid var(--color-primary-700);
+}
+
+input::placeholder {
+    color: var(--color-text-tertiary);
+}
+
+input.error {
+    border-color: #ff4d4f !important;
+}
+
+.error-message {
+    color: var(--color-utility-error);
+    display: none;
+    font-size: 14px;
+    margin-top: 12px;
+    margin-bottom: 0px;
+    text-align: center;
+}

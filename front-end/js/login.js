@@ -4,6 +4,8 @@ const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const errorText = document.getElementById('errorText');
 const togglePassword = document.getElementById('togglePassword');
+const eyeVisible = document.getElementById('eyeVisible');
+const eyeHidden = document.getElementById('eyeHidden');
 
 const USE_LOCAL = true; // اگر true باشه، ورود لوکال است؛ اگر false، ورود به سرور
 const BASE_URL = 'https://your-server.com/api'; // آدرس سرور واقعی
@@ -15,6 +17,8 @@ const LOCAL_USER = { username: 'admin', password: '1234' };
 if (togglePassword) {
   togglePassword.addEventListener('click', () => {
     passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    eyeVisible.style.display = passwordInput.type === 'password' ? 'none' : "block";
+    eyeHidden.style.display = passwordInput.type === 'password' ? 'block' : "none";
   });
 }
 

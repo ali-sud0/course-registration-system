@@ -22,39 +22,107 @@ const cCap = document.getElementById('c-cap');
 const cTime = document.getElementById('c-time');
 const cExam = document.getElementById('c-exam');
 
+// toast
+const toast = document.getElementById('toast');
+const toastTitle = document.getElementById('toastTitle');
+const toastDesc = document.getElementById('toastDesc');
+
+// empty state
+const emptyStateCourse = document.getElementById('emptyStateCourse');
+
+const canShowRemoveAlert = true;
+
 const BASE_URL = 'https://your-server.com/api'; // آدرس سرور واقعی
 
 // ---------- توابع ---------- //
 
 // رندر لیست دروس
+
+
 function renderCourses(list = courses) {
-  coursesContainer.innerHTML = '';
+  coursesContainer.innerHTML = ''
   list.forEach((c, idx) => {
-    const row = document.createElement('div');
-    row.className = 'course-row';
+    const row = document.createElement('tr');
+    row.className = 'table-body';
     row.innerHTML = `
-      <div>${c.name}</div>
-      <div>${c.code}</div>
-      <div>${c.teacher}</div>
-      <div>${c.group}</div>
-      <div>${c.capacity}</div>
-      <div>${c.time}</div>
-      <div>${c.exam}</div>
-      <div class="course-actions">
-        <button class="small-btn edit-btn" onclick="openEdit(${idx})">ویرایش</button>
-        <button class="small-btn remove-btn" onclick="removeCourse(${idx})">حذف</button>
-      </div>
-    `;
+                <td>${c.name}</td>
+                <td>${c.code}</td>
+                <td>${c.group}</td>
+                <td>${c.capacity}</td>
+                <td>${c.teacher}</td>
+                <td>${c.time}</td>
+                <td>${c.exam}</td>
+                <td>
+                  <div class="more-actions">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M8 8.66675C8.36819 8.66675 8.66667 8.36827 8.66667 8.00008C8.66667 7.63189 8.36819 7.33341 8 7.33341C7.63181 7.33341 7.33334 7.63189 7.33334 8.00008C7.33334 8.36827 7.63181 8.66675 8 8.66675Z"
+                        stroke="#475569" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path
+                        d="M8 4.00008C8.36819 4.00008 8.66667 3.7016 8.66667 3.33341C8.66667 2.96522 8.36819 2.66675 8 2.66675C7.63181 2.66675 7.33334 2.96522 7.33334 3.33341C7.33334 3.7016 7.63181 4.00008 8 4.00008Z"
+                        stroke="#475569" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path
+                        d="M8 13.3334C8.36819 13.3334 8.66667 13.0349 8.66667 12.6667C8.66667 12.2986 8.36819 12.0001 8 12.0001C7.63181 12.0001 7.33334 12.2986 7.33334 12.6667C7.33334 13.0349 7.63181 13.3334 8 13.3334Z"
+                        stroke="#475569" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+                  </div>
+                </td>
+              `;
     coursesContainer.appendChild(row);
+
+
+      // more options
+    document.querySelectorAll('.more-actions').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+
+      showBox(e,list,idx);
+      
+    });
   });
+
+  // بستن وقتی بیرون کلیک شد
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.course-menu-wrapper').forEach(box => box.style.display = 'none');
+  });
+
+
+  });
+
+  emptyStateCourse.style.display = list.length === 0 ? 'flex' : 'none';
+}
+
+function showBox(e,list, idx){
+  const box = document.getElementById("courseOptions");
+      box.style.setProperty("--x", e.clientX + "px");
+      box.style.setProperty("--y", e.clientY + "px");
+      box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
+      
+      const courseDelete = document.getElementById("courseDelete");
+      const courseEdit = document.getElementById("courseEdit");
+
+      courseDelete.addEventListener('click', () =>{
+        removeCourse(list[idx]);
+      });
+      
+      courseEdit.addEventListener('click', () =>{
+        openEdit(idx);
+      });
 }
 
 // حذف درس
 function removeCourse(index) {
-  if (!confirm('آیا از حذف این درس مطمئن هستید؟')) return;
+  
+  if (!confirm('آیا از حذف این درس مطمئن هستید؟') || !canShowRemoveAlert) return;
   courses.splice(index, 1);
   localStorage.setItem('courses_data', JSON.stringify(courses));
   renderCourses();
+
+  setTimeout(() => {
+    canShowRemoveAlert = true;
+  }, 1000);
+
 }
 
 // ویرایش درس (تمام فیلدها)
@@ -87,6 +155,8 @@ function openEdit(index) {
   renderCourses();
 }
 
+
+
 // فیلتر لیست
 function applyFilter() {
   const nameQ = filterName.value.trim().toLowerCase();
@@ -98,6 +168,9 @@ function applyFilter() {
   });
   renderCourses(filtered);
 }
+
+
+
 
 // ---------- مودال ---------- //
 if (addCourseBtn) {
@@ -134,6 +207,7 @@ if (addCourseForm) {
     addCourseModal.style.display = 'none';
     addCourseForm.reset();
 
+    showToast('success', "موفق", 'درس با موفقیت اضافه شد');
     // ارسال به سرور (اختیاری)
     try {
       const response = await fetch(`${BASE_URL}/courses`, {
@@ -146,6 +220,26 @@ if (addCourseForm) {
       console.error('خطای شبکه:', err);
     }
   });
+}
+
+function showToast(status, title, desc) {
+  if (status === 'success') {
+    toast.style.backgroundColor = '#10B981';
+  } else if (status === 'failed') {
+    toast.style.backgroundColor = '#EF4444';
+  } else {
+    toast.style.backgroundColor = '#F59E0B';
+  }
+
+  toastTitle.innerHTML = title;
+  toastDesc.innerHTML = desc;
+
+  toast.style.display = 'flex';
+
+  setTimeout(() => {
+    toast.style.display = 'none';
+  }, 3000);
+
 }
 
 // ---------- خروج ---------- //

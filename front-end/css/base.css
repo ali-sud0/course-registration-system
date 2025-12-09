@@ -1,0 +1,63 @@
+:root {
+    --color-primary-900: #1E1B4B;
+    --color-primary-700: #4338CA;
+    --color-primary-500: #6366F1;
+    --color-primary-300: #A5B4FC;
+    --color-primary-100: #EAEFFF;
+
+    --color-bg: #fff;
+    --color-surface: #f1f5f9;
+    --color-surface-2: #E2E8F0;
+
+    --color-border: #e2e8e0;
+
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-tertiary: #94A3B8;
+
+    --color-utility-success: #10B981;
+    --color-utility-warning: #F59E0B;
+    --color-utility-error: #EF4444;
+    
+}
+
+@font-face {
+    font-family: "YekanBakh";
+    src: url("/front-end/font/YekanBakh-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "YekanBakh";
+    src: url("/front-end/font/YekanBakh-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: bold;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    font-family: 'YekanBakh', Tahoma, sans-serif;
+    background: var(--color-surface);
+    direction: rtl;
+    text-decoration: none !important;
+    
+}
+p, a{
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+}
+
+.full{
+    width: 100%;
+}
