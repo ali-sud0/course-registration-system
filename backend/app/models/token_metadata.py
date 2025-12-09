@@ -6,7 +6,7 @@ import uuid
 class TokenMetadata(Base):
     __tablename__ = "token_metadata"
 
-    id = Column(String, primary_key=True, default=uuid.uuid4())
+    id = Column(String, primary_key=True, default=uuid.uuid4)
     user_id = Column(String, ForeignKey("users.id"), nullable=False)
 
     token = Column(String, nullable=False, unique=True)
