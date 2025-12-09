@@ -260,8 +260,8 @@ table, thead{
 }
 
 .table-head > :nth-child(1){flex-grow: 2;}
-.table-head > :nth-child(6){flex-grow: 2;}
-.table-head > :nth-child(8){flex-grow: 0.5;}
+.table-head > :nth-child(7){flex-grow: 2;}
+.table-head > :nth-child(9){flex-grow: 0.5;}
 
 
 .table-body{
@@ -279,10 +279,11 @@ table, thead{
   color: var(--color-text-primary);
 }
 .table-body > :nth-child(1){flex-grow: 2;}
-.table-body > :nth-child(6){flex-grow: 2;}
-.table-body > :nth-child(8){flex-grow: 0.5;}
+.table-body > :nth-child(7){flex-grow: 2;}
+.table-body > :nth-child(9){flex-grow: 0.5;}
 
 .more-actions{
+  z-index: 999;
   width: 28px;
   height: 28px;
   border-radius: 14px;
