@@ -7,11 +7,7 @@ const togglePassword = document.getElementById('togglePassword');
 const eyeVisible = document.getElementById('eyeVisible');
 const eyeHidden = document.getElementById('eyeHidden');
 
-const USE_LOCAL = true; // اگر true باشه، ورود لوکال است؛ اگر false، ورود به سرور
-const BASE_URL = 'https://your-server.com/api'; // آدرس سرور واقعی
-
-// داده های لوکال تستی
-const LOCAL_USER = { username: 'admin', password: '1234' };
+const BASE_URL = 'http://127.0.0.1:8031'; // آدرس سرور واقعی
 
 // نمایش/مخفی کردن رمز
 if (togglePassword) {
@@ -45,30 +41,24 @@ if (loginBtn) {
       return;
     }
 
-    // --------- ورود لوکال --------- //
-    if (USE_LOCAL) {
-      if (username === LOCAL_USER.username && password === LOCAL_USER.password) {
-        localStorage.setItem('accessToken', 'local-token'); // توکن ساختگی لوکال
-        window.location.href = 'dashboard.html';
-      } else {
-        showError('نام کاربری یا رمز عبور اشتباه است');
-      }
-      return;
-    }
 
     // --------- ورود واقعی با API --------- //
+
     try {
-      const response = await fetch(`${BASE_URL}/login`, {
+      const response = await fetch(BASE_URL + "/auth/login", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ 
+          user_number: document.getElementById("username").value,
+          password: document.getElementById("password").value
+        })
       });
 
       const data = await response.json();
 
       if (response.status === 200) {
         // ورود موفق، ذخیره JWT و هدایت
-        localStorage.setItem('accessToken', data.token);
+        localStorage.setItem('accessToken', data.access_token);
         window.location.href = 'dashboard.html';
       } else if (response.status === 401) {
         showError(data.message || 'نام کاربری یا رمز عبور اشتباه است');

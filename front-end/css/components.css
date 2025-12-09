@@ -22,6 +22,9 @@
     cursor: pointer;
     border: none;
 }
+.full{
+    width: 100%;
+}
 
 .btn.primary,
 button.btn.primary {
