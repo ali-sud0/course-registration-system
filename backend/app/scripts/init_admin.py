@@ -20,7 +20,7 @@ def init_admin():
         # check if any admin exists
         admin_exists = db.query(User).filter(User.role == UserRole.Admin).first()
         if admin_exists:
-            print(f"Admin already exists: user_number={admin_exists.user_number}")
+            print(f"Some admin already exists: user_number={admin_exists.user_number}")
             return
 
         # create default admin
