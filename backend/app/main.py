@@ -1,7 +1,7 @@
 # app/main.py
 from fastapi import FastAPI
 from app.core.db import engine, Base
-from app.routers import auth, protected
+from app.routers import auth, protected, prerequisite
 from app.routers import course
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -26,3 +26,4 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(protected.router)
 app.include_router(course.router)
+app.include_router(prerequisite.router)
