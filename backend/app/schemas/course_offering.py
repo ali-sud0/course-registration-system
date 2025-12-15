@@ -15,8 +15,7 @@ class CourseOfferingBase(BaseModel):
 
 
 class CourseOfferingCreate(CourseOfferingBase):
-    pass
-
+    slot_ids: list[UUID]
 
 class CourseOfferingUpdate(BaseModel):
     course_id: UUID | None = None
