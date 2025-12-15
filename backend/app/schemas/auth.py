@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict
 
 
 class LoginRequest(BaseModel):
@@ -17,7 +19,7 @@ class RefreshRequest(BaseModel):
 
 
 class UserOut(BaseModel):
-    id: str
+    id: UUID
     role: str
     user_number: str
     first_name: str
@@ -26,5 +28,4 @@ class UserOut(BaseModel):
     national_number: str
     is_suspended: bool
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

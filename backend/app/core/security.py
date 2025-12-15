@@ -6,11 +6,10 @@ from typing import Optional
 import os
 
 
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-me")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "15"))
-REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
-
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-me") # TODO(esmail : move to env variables !! shouldn't sit here)
+ALGORITHM = "HS256" # TODO(esmail : move to env variables !! shouldn't sit here)
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "15")) # TODO(esmail : move to env variables !! shouldn't sit here)
+REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7")) # TODO(esmail : move to env variables !! shouldn't sit here)
 
 pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
@@ -28,7 +27,7 @@ def create_access_token(subject: str, expires_delta: Optional[timedelta] = None)
     if expires_delta is None:
         expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode = {
-        "sub": subject,
+        "sub": str(subject),
         "iat": now,
         "exp": now + expires_delta,
         "type": "access"
@@ -40,7 +39,7 @@ def create_refresh_token(subject: str, expires_delta: Optional[timedelta] = None
     if expires_delta is None:
         expires_delta = timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
     to_encode = {
-        "sub": subject,
+        "sub": str(subject),
         "iat": now,
         "exp": now + expires_delta,
         "type": "refresh"

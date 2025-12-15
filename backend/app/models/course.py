@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, SmallInteger
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
-from app.db import Base
+from app.core.db import Base
 
 
 class Course(Base):

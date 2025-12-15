@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db import get_db
+from app.core.db import get_db
 from app.models.course import Course
 from app.schemas.course import CourseCreate, CourseUpdate, CourseOut
 # from app.core.auth import require_role  # already implemented

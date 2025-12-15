@@ -23,4 +23,4 @@ class CourseOut(CourseBase):
     id: UUID
 
     class Config:
-        from_attributes = True  # replaces orm_mode=True
+        from_attributes = True
