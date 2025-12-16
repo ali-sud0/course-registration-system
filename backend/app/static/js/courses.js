@@ -740,8 +740,8 @@ function handlePermissions() {
     menuStudents.style.display = "block";
     menuSettings.style.display = "block";
 
-    document.querySelectorAll('.more-actions').forEach(box => box.style.opacity = '0');
-    document.querySelectorAll('.more-actions-prerequires').forEach(box => box.style.opacity = '0');
+    document.querySelectorAll('.more-actions').forEach(box => box.style.opacity = '1');
+    document.querySelectorAll('.more-actions-prerequires').forEach(box => box.style.opacity = '1');
 
 
   } else if (getUserRole() === "Professor") {
