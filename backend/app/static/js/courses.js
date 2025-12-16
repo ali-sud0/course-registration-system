@@ -136,7 +136,6 @@ async function renderPrerequires(list = prerequires, isFilter = false) {
       const row = btn.closest('tr');
       const index = Array.from(prerequiresContainer.querySelectorAll('tr')).indexOf(row);
       showPrerequireBox(e, prerequires, index);
-      console.log("A");
 
     });
   });
@@ -454,8 +453,6 @@ async function openEditPrerequire() {
   const p = prerequires[editingPrerequireIndex];
   assignCoursesList();
 
-  addPrerequireForm.addEventListener('submit', null);
-  addPrerequireForm.addEventListener('submit', null);
   addPrerequireForm.addEventListener('submit', async e => {
     e.preventDefault();
 
@@ -743,8 +740,8 @@ function handlePermissions() {
     menuStudents.style.display = "block";
     menuSettings.style.display = "block";
 
-    document.querySelectorAll('.more-actions').forEach(box => box.style.opacity = '1f');
-    document.querySelectorAll('.more-actions-prerequires').forEach(box => box.style.opacity = '1f');
+    document.querySelectorAll('.more-actions').forEach(box => box.style.opacity = '1');
+    document.querySelectorAll('.more-actions-prerequires').forEach(box => box.style.opacity = '1');
 
 
   } else if (getUserRole() === "Professor") {
@@ -755,8 +752,8 @@ function handlePermissions() {
     menuStudents.style.display = "none";
     menuSettings.style.display = "none";
 
-    document.querySelectorAll('.more-actions').forEach(box => box.style.opacity = '0f');
-    document.querySelectorAll('.more-actions-prerequires').forEach(box => box.style.opacity = '0f');
+    document.querySelectorAll('.more-actions').forEach(box => box.style.opacity = '0');
+    document.querySelectorAll('.more-actions-prerequires').forEach(box => box.style.opacity = '0');
   }
   else if (getUserRole() === "Student") {
      addCourseBtn.style.display = "none";
@@ -766,8 +763,8 @@ function handlePermissions() {
     menuStudents.style.display = "none";
     menuSettings.style.display = "none";
 
-    document.querySelectorAll('.more-actions').forEach(box => box.style.opacity = '0f');
-    document.querySelectorAll('.more-actions-prerequires').forEach(box => box.style.opacity = '0f');
+    document.querySelectorAll('.more-actions').forEach(box => box.style.opacity = '0');
+    document.querySelectorAll('.more-actions-prerequires').forEach(box => box.style.opacity = '0');
   }
 }
 
