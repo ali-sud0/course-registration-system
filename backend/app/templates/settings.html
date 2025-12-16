@@ -7,7 +7,7 @@
   <title>درسینو - داشبورد</title>
   <link rel="stylesheet" href="../static/css/base.css">
   <link rel="stylesheet" href="../static/css/components.css">
-  <link rel="stylesheet" href="../static/css/dashboard.css">
+  <link rel="stylesheet" href="../static/css/settings.css">
 </head>
 
 <body>
@@ -18,19 +18,19 @@
         <div class="brand-title">درسینو</div>
       </div>
       <nav class="menu">
-        <a href="#">
-          <div class="menu-item active">
+        <a id="menuCourses" href="./courses.html">
+          <div class="menu-item">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M9.99996 5.83333V17.5M9.99996 5.83333C9.99996 4.94928 9.64877 4.10143 9.02365 3.47631C8.39853 2.85119 7.55068 2.5 6.66663 2.5H2.49996C2.27895 2.5 2.06698 2.5878 1.9107 2.74408C1.75442 2.90036 1.66663 3.11232 1.66663 3.33333V14.1667C1.66663 14.3877 1.75442 14.5996 1.9107 14.7559C2.06698 14.9122 2.27895 15 2.49996 15H7.49996C8.163 15 8.79889 15.2634 9.26773 15.7322C9.73657 16.2011 9.99996 16.837 9.99996 17.5M9.99996 5.83333C9.99996 4.94928 10.3511 4.10143 10.9763 3.47631C11.6014 2.85119 12.4492 2.5 13.3333 2.5H17.5C17.721 2.5 17.9329 2.5878 18.0892 2.74408C18.2455 2.90036 18.3333 3.11232 18.3333 3.33333V14.1667C18.3333 14.3877 18.2455 14.5996 18.0892 14.7559C17.9329 14.9122 17.721 15 17.5 15H12.5C11.8369 15 11.201 15.2634 10.7322 15.7322C10.2634 16.2011 9.99996 16.837 9.99996 17.5M13.3333 10H15M13.3333 6.66667H15M4.99996 10H6.66663M4.99996 6.66667H6.66663"
                 stroke="#4338CA" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
 
-            <p class="menu-item-text active">دروس</p>
+            <p class="menu-item-text">دروس</p>
 
           </div>
         </a>
-        <a href="#">
+        <a id="menuProfessors" href="#">
           <div class="menu-item">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -43,7 +43,7 @@
 
           </div>
         </a>
-        <a href="#">
+        <a id="menuStudents" href="#">
           <div class="menu-item">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -56,8 +56,8 @@
 
           </div>
         </a>
-        <a href="#">
-          <div class="menu-item">
+        <a id="menuSettings" href="./settings.html">
+          <div class="menu-item active">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M8.05918 3.44663C8.10509 2.96358 8.32945 2.515 8.68843 2.18853C9.0474 1.86206 9.5152 1.68115 10.0004 1.68115C10.4857 1.68115 10.9535 1.86206 11.3124 2.18853C11.6714 2.515 11.8958 2.96358 11.9417 3.44663C11.9693 3.75868 12.0716 4.05948 12.2401 4.32358C12.4086 4.58768 12.6382 4.8073 12.9096 4.96386C13.1809 5.12042 13.486 5.2093 13.7989 5.22298C14.1119 5.23666 14.4235 5.17474 14.7075 5.04246C15.1484 4.84228 15.6481 4.81331 16.1092 4.9612C16.5703 5.10909 16.9599 5.42326 17.2021 5.84255C17.4443 6.26185 17.5219 6.75627 17.4197 7.22961C17.3175 7.70294 17.0428 8.12131 16.6492 8.4033C16.3928 8.58317 16.1836 8.82214 16.0391 9.09998C15.8946 9.37783 15.8192 9.68639 15.8192 9.99955C15.8192 10.3127 15.8946 10.6213 16.0391 10.8991C16.1836 11.177 16.3928 11.4159 16.6492 11.5958C17.0428 11.8778 17.3175 12.2962 17.4197 12.7695C17.5219 13.2428 17.4443 13.7372 17.2021 14.1565C16.9599 14.5758 16.5703 14.89 16.1092 15.0379C15.6481 15.1858 15.1484 15.1568 14.7075 14.9566C14.4235 14.8244 14.1119 14.7624 13.7989 14.7761C13.486 14.7898 13.1809 14.8787 12.9096 15.0352C12.6382 15.1918 12.4086 15.4114 12.2401 15.6755C12.0716 15.9396 11.9693 16.2404 11.9417 16.5525C11.8958 17.0355 11.6714 17.4841 11.3124 17.8106C10.9535 18.137 10.4857 18.3179 10.0004 18.3179C9.5152 18.3179 9.0474 18.137 8.68843 17.8106C8.32945 17.4841 8.10509 17.0355 8.05918 16.5525C8.03163 16.2403 7.92926 15.9394 7.76073 15.6752C7.5922 15.411 7.36249 15.1913 7.09104 15.0347C6.81959 14.8782 6.5144 14.7893 6.20133 14.7757C5.88825 14.7621 5.57651 14.8242 5.29251 14.9566C4.85158 15.1568 4.35195 15.1858 3.89084 15.0379C3.42974 14.89 3.04015 14.5758 2.79791 14.1565C2.55567 13.7372 2.47811 13.2428 2.58031 12.7695C2.68251 12.2962 2.95718 11.8778 3.35084 11.5958C3.60719 11.4159 3.81645 11.177 3.96092 10.8991C4.10538 10.6213 4.1808 10.3127 4.1808 9.99955C4.1808 9.68639 4.10538 9.37783 3.96092 9.09998C3.81645 8.82214 3.60719 8.58317 3.35084 8.4033C2.95773 8.12117 2.68355 7.70296 2.58159 7.22995C2.47964 6.75694 2.55718 6.26291 2.79916 5.84389C3.04114 5.42487 3.43027 5.11078 3.89092 4.96266C4.35157 4.81455 4.85083 4.84299 5.29168 5.04246C5.57564 5.17474 5.8873 5.23666 6.20026 5.22298C6.51322 5.2093 6.81829 5.12042 7.08962 4.96386C7.36096 4.8073 7.59059 4.58768 7.75906 4.32358C7.92754 4.05948 8.02991 3.75868 8.05751 3.44663M12.5 10C12.5 11.3808 11.3807 12.5 10 12.5C8.6193 12.5 7.50001 11.3808 7.50001 10C7.50001 8.61933 8.6193 7.50004 10 7.50004C11.3807 7.50004 12.5 8.61933 12.5 10Z"
@@ -65,7 +65,7 @@
             </svg>
 
 
-            <p class="menu-item-text">تنظیمات</p>
+            <p class="menu-item-text active">تنظیمات</p>
 
           </div>
         </a>
@@ -88,66 +88,40 @@
       </section>
 
       <div class="main-body">
-        <header class="main-header">
+        <div class="text-header">
           <div class="text-container">
-            <h2>دروس</h2>
-            <p class="small-muted">همه جزئیات مربوط به درس‌ها را از اینجا مدیریت کنید</p>
+            <h2>تنظیمات</h2>
+            <p class="small-muted">پیکربندی و مدیریت تنظیمات اصلی سامانه از این قسمت انجام می‌شود</p>
           </div>
 
-          <button class="btn primary" id="openAddCourseModal">+ افزودن درس</button>
-        </header>
-
-        <div class="table">
-          <section class="controls">
-
-            <div class="filter-row">
-              <input id="filterName" type="text" placeholder="نام درس">
-              <input id="filterProfessor" type="text" placeholder="نام استاد">
-              <button id="btnFilter" class="btn primary">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M13.9999 13.9999L11.1066 11.1066M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z"
-                    stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                جستجو
-              </button>
-            </div>
-          </section>
-
-          <section class="table-section">
-            <table>
-              <thead>
-                <tr class="table-head">
-                  <td>نام درس</td>
-                  <td>کد درس</td>
-                  <td>واحد</td>
-                  <td>گروه</td>
-                  <td>ظرفیت</td>
-                  <td>استاد</td>
-                  <td>زمان کلاس</td>
-                  <td>تاریخ امتحان</td>
-                  <td>عملیات</td>
-                </tr>
-              </thead>
-
-              <tbody id="coursesContainer">
-
-
-
-              </tbody>
-
-
-            </table>
-            <div id="emptyStateCourse" class="empty-state-courses">
-
-              <img src="../static/images/no-content.png">
-              <h4 class="empty-state-title">درسی یافت نشد</h4>
-              <p>برای افزودن درس روی دکمه “افزودن درس” کلیک کنید</p>
-
-            </div>
-          </section>
         </div>
-      </div>
+
+        <div class="settings-container">
+          <div class="text-header">
+            <div class="text-container">
+              <h2 class="text-container-title">محدودیت تعداد واحد</h2>
+              <p class="small-muted">از قسمت زیر می‌توانید حداقل و حداکثر واحد‌های اخذ شده توسط یک دانشجو را مشخص کنید</p>
+            </div>
+          </div>
+
+          <div class="units-container">
+            <div class="input-container">
+              <label>حداقل واحد</label>
+              <input id="minUnits" type="number" placeholder="حداقل واحد" required>
+            </div>
+
+            <div class="input-container">
+              <label>حداکثر واحد</label>
+              <input id="maxUnits" type="number" placeholder="حداکثر واحد" required>
+            </div>
+
+          </div>
+          <div class="button-container">
+          <button id="btnSave" type="button" class="btn primary">ذخیره</button>
+          </div>
+
+
+        </div>
 
 
     </main>
@@ -162,96 +136,7 @@
     </div>
   </div>
 
-  <div id="courseOptions" class="course-menu-wrapper">
-    <div id="courseEdit" class="course-menu-item">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g clip-path="url(#clip0_15_638)">
-          <path
-            d="M7.5 2.5L9.5 4.5M10.587 3.40595C10.8513 3.14166 10.9999 2.78318 10.9999 2.40937C11 2.03557 10.8515 1.67705 10.5872 1.4127C10.3229 1.14834 9.96445 0.999803 9.59064 0.999756C9.21684 0.999709 8.85832 1.14816 8.59397 1.41245L1.92097 8.08695C1.80488 8.2027 1.71902 8.34521 1.67097 8.50195L1.01047 10.6779C0.997545 10.7212 0.996569 10.7671 1.00764 10.8109C1.01872 10.8546 1.04143 10.8946 1.07337 10.9264C1.1053 10.9583 1.14528 10.981 1.18905 10.992C1.23282 11.003 1.27875 11.0019 1.32197 10.9889L3.49847 10.3289C3.65505 10.2813 3.79755 10.196 3.91347 10.0804L10.587 3.40595Z"
-            stroke="#0F172A" stroke-linecap="round" stroke-linejoin="round" />
-        </g>
-        <defs>
-          <clipPath id="clip0_15_638">
-            <rect width="12" height="12" fill="white" />
-          </clipPath>
-        </defs>
-      </svg>
-      <span>ویرایش</span>
-    </div>
-    <div id="courseDelete" class="course-menu-item red">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M9.5 3V10C9.5 10.2652 9.39464 10.5196 9.20711 10.7071C9.01957 10.8946 8.76522 11 8.5 11H3.5C3.23478 11 2.98043 10.8946 2.79289 10.7071C2.60536 10.5196 2.5 10.2652 2.5 10V3M1.5 3H10.5M4 3V2C4 1.73478 4.10536 1.48043 4.29289 1.29289C4.48043 1.10536 4.73478 1 5 1H7C7.26522 1 7.51957 1.10536 7.70711 1.29289C7.89464 1.48043 8 1.73478 8 2V3"
-          stroke="#EF4444" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-      <span>حذف</span>
-    </div>
-  </div>
-
-  <!-- مودال افزودن درس -->
-  <div id="addCourseModal" class="modal">
-    <div class="modal-content">
-      <span id="closeModal" class="close">&times;</span>
-      <h3 id="modalTitle">افزودن درس جدید</h3>
-      <form id="addCourseForm" class="course-form">
-        <div class="input-container">
-          <label>نام درس</label>
-          <input id="c-name" type="text" placeholder="نام درس" required>
-        </div>
-
-        <div class="input-container">
-          <label>کد درس</label>
-          <input id="c-code" type="number" placeholder="کد درس" required>
-        </div>
-
-        <div class="input-container">
-          <label>تعداد واحد</label>
-          <input id="c-units" type="number" placeholder="تعداد واحد" required>
-        </div>
-
-        <div class="input-container">
-          <label>استاد</label>
-          <select id="c-professor">
-            <option value="">--- انتخاب استاد ---</option>
-            <option value="ادیب‌فر">مهندس ادیب‌فر</option>
-            <option value="دکتر حسینی">دکتر حسینی</option>
-          </select>
-        </div>
-
-
-        <div class="input-container">
-          <label>گروه</label>
-          <input id="c-group" type="number" placeholder="گروه" required>
-        </div>
-
-        <div class="input-container">
-          <label>ظرفیت</label>
-          <input id="c-cap" type="number" placeholder="ظرفیت" required>
-        </div>
-
-
-        <div class="input-container">
-          <label>زمان کلاس</label>
-          <input id="c-time" type="date">
-        </div>
-
-
-        <div class="input-container">
-          <label>تاریخ امتحان</label>
-          <input id="c-exam" type="date">
-        </div>
-
-
-
-        <div class="form-actions">
-          <button type="button" class="btn secondary" id="cancelModal">انصراف</button>
-          <button type="submit" class="btn primary">ذخیره</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script src="../static/js/dashboard.js" defer></script>
+  <script src="../static/js/settings.js" defer></script>
 </body>
 
 </html>
