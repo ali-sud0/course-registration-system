@@ -26,7 +26,10 @@ def create_course(course: CourseCreate, db: Session = Depends(get_db)):
     new_course = Course(
         course_code=course.course_code,
         name=course.name,
-        units=course.units
+        professor=course.professor,
+        units=course.units,
+        capacity=course.capacity,
+        grp=course.grp
     )
 
     db.add(new_course)
@@ -51,8 +54,17 @@ def update_course(course_id: str, data: CourseUpdate, db: Session = Depends(get_
     if data.name is not None:
         course.name = data.name
 
+    if data.name is not None:
+        course.professor = data.professor
+
     if data.units is not None:
         course.units = data.units
+
+    if data.capacity is not None:
+        course.capacity = data.capacity
+
+    if data.grp is not None:
+        course.grp = data.grp
 
     if data.course_code is not None:
         course.course_code = data.course_code

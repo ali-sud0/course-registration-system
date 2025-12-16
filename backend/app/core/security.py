@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from typing import Optional
+from app.models.user import UserRole
 import os
 
 
@@ -22,16 +23,21 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def create_access_token(subject: str, expires_delta: Optional[timedelta] = None) -> str:
+def create_access_token(subject: str, role: Optional[UserRole] = None, expires_delta: Optional[timedelta] = None) -> str:
     now = datetime.utcnow()
     if expires_delta is None:
         expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    
     to_encode = {
         "sub": str(subject),
         "iat": now,
         "exp": now + expires_delta,
-        "type": "access"
+        "type": "access",
     }
+    
+    if role:
+        to_encode["role"] = role.value 
+    
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 def create_refresh_token(subject: str, expires_delta: Optional[timedelta] = None) -> str:

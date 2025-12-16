@@ -25,7 +25,7 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
     if user.is_suspended:
         raise HTTPException(403, "User account is suspended")
 
-    access = security.create_access_token(subject=user.id)
+    access = security.create_access_token(subject=user.id, role=user.role)
     refresh = security.create_refresh_token(subject=user.id)
 
     # extract refresh token expiration
