@@ -39,7 +39,7 @@ def create_course(course: CourseCreate, db: Session = Depends(get_db)):
 
 
 # READ ALL
-@router.get("/", response_model=list[CourseOut], dependencies=[Depends(require_role("Admin"))])
+@router.get("/", response_model=list[CourseOut])
 def list_courses(db: Session = Depends(get_db)):
     return db.query(Course).all()
 
