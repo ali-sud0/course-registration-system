@@ -59,7 +59,7 @@ if (loginBtn) {
       if (response.status === 200) {
         // ورود موفق، ذخیره JWT و هدایت
         localStorage.setItem('accessToken', data.access_token);
-        window.location.href = 'dashboard.html';
+        window.location.href = 'courses.html';
       } else if (response.status === 401) {
         showError(data.message || 'نام کاربری یا رمز عبور اشتباه است');
       } else {

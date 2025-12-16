@@ -149,20 +149,20 @@
 }
 
 
-.main-header {
+.text-header {
     display: flex;
     flex-direction: row;
     margin-bottom: 16px;
     align-items: end;
 }
 
-.main-header h2 {
+.text-header h2 {
     margin-top: 24px;
     font-size: 20px;
     color: var(--color-text-primary);
 }
 
-.main-header > button {
+.text-header > button {
   width: 130px;
 }
 
@@ -284,6 +284,21 @@ table, thead{
   cursor: pointer;
 }
 
+.more-actions-prerequires{
+  z-index: 999;
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.more-actions-prerequires:hover{
+  background-color: var(--color-surface-2);
+  cursor: pointer;
+}
 
 .small-btn {
     padding: 6px 8px;
@@ -326,9 +341,45 @@ table, thead{
   color: var(--color-text-tertiary);
 }
 
+.prerequire{
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  padding: 0px 24px 16px 24px;
+  margin-top: 16px;
+  background-color: var(--color-bg);
+  border-radius: 16px;
+}
+
+#addPrerequire{
+  width: 150px;
+}
+
+.prerequire-table-head > :nth-child(1){flex-grow: 0.5;}
+.prerequire-table-head > :nth-child(2){text-align: right;}
+.prerequire-table-head > :nth-child(3){flex-grow: 0.1;}
+
+.prerequire-table-body > :nth-child(1){flex-grow: 0.5 !important;}
+.prerequire-table-body > :nth-child(2){text-align: right !important;}
+.prerequire-table-body > :nth-child(3){flex-grow: 0.1 !important;}
+
 /* ---------------- Menu Wrapper ---------------- */
 
 .course-menu-wrapper{
+  display: none;
+  position: fixed;
+  top: var(--y);
+  left: var(--x);
+  width: 100px;
+  gap: 4px;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+.prerequire-menu-wrapper{
   display: none;
   position: fixed;
   top: var(--y);
