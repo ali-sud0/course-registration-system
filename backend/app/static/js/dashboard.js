@@ -1,14 +1,17 @@
 // بارگذاری اولیه دروس از localStorage
 let courses = JSON.parse(localStorage.getItem('courses_data')) || [];
 
+const navbarTitle = document.getElementById('navbarTitle');
+
 // ارجاع به عناصر DOM
 const coursesContainer = document.getElementById('coursesContainer');
 const logoutBtn = document.getElementById('logoutBtn');
 const btnFilter = document.getElementById('btnFilter');
 const filterName = document.getElementById('filterName');
-const filterCode = document.getElementById('filterCode');
+const filterProfessor = document.getElementById('filterProfessor');
 
 // مودال و فرم افزودن درس
+const modalTitle = document.getElementById('modalTitle');
 const addCourseBtn = document.getElementById('openAddCourseModal');
 const addCourseModal = document.getElementById('addCourseModal');
 const closeModal = document.getElementById('closeModal');
@@ -16,7 +19,8 @@ const cancelModal = document.getElementById('cancelModal');
 const addCourseForm = document.getElementById('addCourseForm');
 const cName = document.getElementById('c-name');
 const cCode = document.getElementById('c-code');
-const cTeacher = document.getElementById('c-teacher');
+const cUnits = document.getElementById('c-units');
+const cProfessor = document.getElementById('c-professor');
 const cGroup = document.getElementById('c-group');
 const cCap = document.getElementById('c-cap');
 const cTime = document.getElementById('c-time');
@@ -32,39 +36,60 @@ const emptyStateCourse = document.getElementById('emptyStateCourse');
 
 const canShowRemoveAlert = true;
 
-const BASE_URL = 'http://127.0.0.1:8031'; // آدرس سرور واقعی
+const BASE_URL = 'http://127.0.0.1:8023'; // آدرس سرور واقعی
 
 // ---------- توابع ---------- //
 
+
+if (getUserRole() === "Admin") {
+  navbarTitle.innerText = "سلام ادمین";
+} else if (getUserRole() === "Professor") {
+  navbarTitle.innerText = "سلام استاد";
+} else if (getUserRole() === "Student") {
+  navbarTitle.innerText = "سلام دانشجو عزیز";
+}
+
+
 // رندر لیست دروس
 
+async function renderCourses(list = courses, isFilter = false) {
+  coursesContainer.innerHTML = '';
 
-async function renderCourses(list = courses) {
-  coursesContainer.innerHTML = ''
-
-  try {
-    const response = await fetch(BASE_URL + "/courses", {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer " + localStorage.getItem("accessToken")
+  if (!isFilter) {
+    try {
+      const response = await fetch(BASE_URL + "/courses", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer " + localStorage.getItem("accessToken")
+        }
+      });
+      if (!response.ok) {
+        console.warn('ارسال به سرور موفق نبود');
+      } else {
+        list = await response.json();
+        courses = list;
       }
-    });
-    if (!response.ok) {
-      console.warn('ارسال به سرور موفق نبود');
-    } else {
-      list = await response.json();
-      courses = list;
-      list.forEach((c, idx) => {
-        const row = document.createElement('tr');
-        row.className = 'table-body';
-        row.innerHTML = `
+      handleJwtExpire(response);
+
+
+    } catch (err) {
+      console.error('خطای شبکه:', err);
+    }
+  } else {
+
+  }
+
+  list.forEach((c, idx) => {
+    const row = document.createElement('tr');
+    row.className = 'table-body';
+    row.innerHTML = `
                 <td>${c.name}</td>
                 <td>${c.course_code}</td>
                 <td>${c.units}</td>
-                <td>2</td>
-                <td>24</td>
-                <td>مهندس ادیب‌فر</td>
+                <td>${c.grp}</td>
+                <td>${c.capacity}</td>
+                <td>${c.professor}</td>
                 <td>2025-11-09  10:30</td>
                 <td>2025-12-27  11:30</td>
                 <td>
@@ -84,34 +109,30 @@ async function renderCourses(list = courses) {
                   </div>
                 </td>
               `;
-        coursesContainer.appendChild(row);
+    coursesContainer.appendChild(row);
 
 
-      });
+  });
 
 
-        // more options
-        document.querySelectorAll('.more-actions').forEach(btn => {
-          btn.addEventListener('click', function (e) {
-            e.stopPropagation();
+  // more options
+  document.querySelectorAll('.more-actions').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
 
-                const row = btn.closest('tr');
-            const index = Array.from(coursesContainer.querySelectorAll('tr')).indexOf(row);
-            showBox(e, courses, index);
+      const row = btn.closest('tr');
+      const index = Array.from(coursesContainer.querySelectorAll('tr')).indexOf(row);
+      showBox(e, courses, index);
 
-          });
-        });
+    });
+  });
 
-        // بستن وقتی بیرون کلیک شد
-        document.addEventListener('click', () => {
-          document.querySelectorAll('.course-menu-wrapper').forEach(box => box.style.display = 'none');
-        });
+  // بستن وقتی بیرون کلیک شد
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.course-menu-wrapper').forEach(box => box.style.display = 'none');
+  });
 
-    }
 
-  } catch (err) {
-    console.error('خطای شبکه:', err);
-  }
 
   /*
 
@@ -176,11 +197,11 @@ function showBox(e, list, idx) {
   const courseDelete = document.getElementById("courseDelete");
   const courseEdit = document.getElementById("courseEdit");
 
-  courseDelete.addEventListener('click', function(e) {
+  courseDelete.addEventListener('click', function (e) {
     removeCourse(idx);
   });
 
-  courseEdit.addEventListener('click', function(e) {
+  courseEdit.addEventListener('click', function (e) {
     openEdit(idx);
   });
 }
@@ -188,39 +209,47 @@ function showBox(e, list, idx) {
 // حذف درس
 async function removeCourse(index) {
 
-  if (!confirm('آیا از حذف این درس مطمئن هستید؟') || !canShowRemoveAlert) return;
-  
-   try {
-      const course = courses[index];
-      const response = await fetch(BASE_URL + "/courses/" + course.id, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer " + localStorage.getItem("accessToken")
-        }
-      });
-      if (!response.ok) {
-        console.warn('ارسال به سرور موفق نبود');
-      } else {
-          renderCourses();
-        showToast('success', "موفق", 'درس با موفقیت اضافه حذق شد');
+  if (!confirm('آیا از حذف این درس مطمئن هستید؟') && !canShowRemoveAlert) return;
+
+  try {
+    const course = courses[index];
+    const response = await fetch(BASE_URL + "/courses/" + course.id, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer " + localStorage.getItem("accessToken")
       }
-    } catch (err) {
-      console.error('خطای شبکه:', err);
+    });
+    if (!response.ok) {
+      showToast('failed', "خطا", 'خطا در حذف درس');
+    } else {
+      renderCourses();
+      showToast('success', "موفق", 'درس با موفقیت حذف شد');
     }
+  } catch (err) {
+    console.error('خطای شبکه:', err);
+  }
 
 
 }
 
 // ویرایش درس (تمام فیلدها)
 async function openEdit(index) {
+
+  addCourseModal.style.display = 'block';
+  modalTitle.innerText = "ویرایش درس";
+
   const course = courses[index];
-  const newName = prompt('نام درس:', course.name);
-  if (newName === null) return;
-  const newCode = prompt('کد درس:', course.course_code);
-  if (newCode === null) return;
-  const newUnits = prompt('تعداد واحد:', course.units);
-  if (newUnits === null) return;
+
+  cName.value = course.name;
+  cCode.value = course.course_code;
+  cUnits.value = course.units;
+  cProfessor.value = course.professor;
+  cGroup.value = course.grp;
+  cCap.value = course.capacity;
+  cTime.value = course.time;
+  cExam.value = course.exam;
+
   /*
   const newTeacher = prompt('استاد:', course.teacher);
   if (newTeacher === null) return;
@@ -235,37 +264,59 @@ async function openEdit(index) {
 
   */
 
-  course.name = newName.trim();
-  course.course_code = newCode.trim();
-  course.units = newUnits.trim();
+  addCourseForm.removeEventListener('submit', null);
+  addCourseForm.addEventListener('submit', async e => {
+    e.preventDefault();
 
-  /*
-  course.teacher = newTeacher.trim();
-  course.group = newGroup.trim();
-  course.capacity = parseInt(newCap, 10) || course.capacity;
-  course.time = newTime.trim();
-  course.exam = newExam.trim();
-  */
+    const newCourse = {
+      course_code: cCode.value.trim(),
+      name: cName.value.trim(),
+      units: cUnits.value.trim(),
+      professor: cProfessor.value.trim(),
+      capacity: cCap.value.trim(),
+      grp: cGroup.value.trim()
+      //time: cTime.value,
+      //exam: cExam.value
+    };
 
-   try {
+    if (!newCourse.name || !newCourse.course_code) {
+      alert('نام درس و کد الزامی است.');
+      return;
+    }
+
+    try {
       const response = await fetch(BASE_URL + "/courses/" + course.id, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           "Authorization": "Bearer " + localStorage.getItem("accessToken")
         },
-        body: JSON.stringify(course)
+        body: JSON.stringify(newCourse)
       });
       if (!response.ok) {
-        console.warn('ارسال به سرور موفق نبود');
+        showToast('failed', "خطا", 'خطا در ویرایش درس');
       } else {
-          renderCourses();
-        showToast('success', "موفق", 'درس با موفقیت اضافه ویرایش شد');
+        renderCourses();
+        showToast('success', "موفق", 'درس با موفقیت ویرایش شد');
       }
+      addCourseModal.style.display = 'none';
+
+      handleJwtExpire(response);
+
     } catch (err) {
       console.error('خطای شبکه:', err);
     }
 
+    /*
+    course.teacher = newTeacher.trim();
+    course.group = newGroup.trim();
+    course.capacity = parseInt(newCap, 10) || course.capacity;
+    course.time = newTime.trim();
+    course.exam = newExam.trim();
+    */
+
+
+  });
 }
 
 
@@ -273,14 +324,13 @@ async function openEdit(index) {
 // فیلتر لیست
 function applyFilter() {
   const nameQ = filterName.value.trim().toLowerCase();
-  const codeQ = filterCode.value.trim().toLowerCase();
+  const profQ = filterProfessor.value !== null ? filterProfessor.value.trim().toLowerCase() : "";
   const filtered = courses.filter(c => {
     const matchName = nameQ ? c.name.toLowerCase().includes(nameQ) : true;
-    const matchCode = codeQ ? c.course_code.toLowerCase().includes(codeQ) : true;
-    return matchName && matchCode;
+    const matchTeacher = profQ ? c.professor?.toLowerCase().includes(profQ.toLowerCase()) : true;
+    return matchName && matchTeacher;
   });
-  renderCourses(filtered);
-  console.log(filtered);
+  renderCourses(filtered, true);
 }
 
 
@@ -288,7 +338,11 @@ function applyFilter() {
 
 // ---------- مودال ---------- //
 if (addCourseBtn) {
-  addCourseBtn.addEventListener('click', () => addCourseModal.style.display = 'block');
+  addCourseBtn.addEventListener('click', function (e) {
+    addCourseModal.style.display = 'block';
+    modalTitle.innerText = "افزودن درس جدید";
+  });
+
 }
 if (closeModal) closeModal.addEventListener('click', () => addCourseModal.style.display = 'none');
 if (cancelModal) cancelModal.addEventListener('click', () => addCourseModal.style.display = 'none');
@@ -296,16 +350,17 @@ window.addEventListener('click', e => { if (e.target === addCourseModal) addCour
 
 // ---------- افزودن درس ---------- //
 if (addCourseForm) {
+  addCourseForm.removeEventListener('submit', null);
   addCourseForm.addEventListener('submit', async e => {
     e.preventDefault();
 
     const newCourse = {
       name: cName.value.trim(),
       course_code: cCode.value.trim(),
-      units: units.value.trim()
-      //teacher: cTeacher.value,
-      //group: cGroup.value.trim(),
-      //capacity: parseInt(cCap.value, 10) || 0,
+      units: cUnits.value.trim(),
+      professor: cProfessor.value.trim(),
+      capacity: cCap.value.trim(),
+      grp: cGroup.value.trim()
       //time: cTime.value,
       //exam: cExam.value
     };
@@ -333,11 +388,14 @@ if (addCourseForm) {
         body: JSON.stringify(newCourse)
       });
       if (!response.ok) {
-        console.warn('ارسال به سرور موفق نبود');
+        showToast('failed', "خطا", 'خطا در افزودن درس');
       } else {
-          renderCourses();
+        renderCourses();
         showToast('success', "موفق", 'درس با موفقیت اضافه شد');
       }
+      addCourseModal.style.display = 'none';
+      handleJwtExpire(response);
+
     } catch (err) {
       console.error('خطای شبکه:', err);
     }
@@ -363,6 +421,27 @@ function showToast(status, title, desc) {
   }, 3000);
 
 }
+
+function getUserRole() {
+  const token = localStorage.getItem("accessToken");
+  if (token !== null) {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload)).role;
+  }
+}
+
+function handleJwtExpire(response) {
+  if (response.status === 401) {
+    alert("زمان شما منقضی شده است, لطفا مجدد لاگین کنید");
+
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+
+    window.location.href = "./login.html";
+    return;
+  }
+}
+
 
 // ---------- خروج ---------- //
 if (logoutBtn) logoutBtn.addEventListener('click', () => window.location.href = 'login.html');
