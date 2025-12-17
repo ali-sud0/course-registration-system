@@ -2,6 +2,7 @@
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
@@ -34,16 +35,20 @@ def create_course_offering(
     data: CourseOfferingCreate,
     db: Session = Depends(get_db),
 ):
-    # 1️⃣ Validate foreign keys FIRST
+    # 1️⃣ Validate foreign keys
 
     course = db.query(Course).filter(Course.id == data.course_id).first()
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
 
-    professor = db.query(User).filter(
-        User.id == data.professor_id,
-        User.role == UserRole.Professor
-    ).first()
+    professor = (
+        db.query(User)
+        .filter(
+            User.id == data.professor_id,
+            User.role == UserRole.Professor,
+        )
+        .first()
+    )
     if not professor:
         raise HTTPException(status_code=404, detail="Professor not found")
 
@@ -52,6 +57,7 @@ def create_course_offering(
         raise HTTPException(status_code=404, detail="Semester not found")
 
     # 2️⃣ Validate schedule slots
+
     slots = (
         db.query(ScheduleSlot)
         .filter(ScheduleSlot.id.in_(data.slot_ids))
@@ -59,30 +65,51 @@ def create_course_offering(
     )
 
     if len(slots) != len(data.slot_ids):
-        raise HTTPException(status_code=404, detail="One or more schedule slots not found")
+        raise HTTPException(
+            status_code=404,
+            detail="One or more schedule slots not found",
+        )
 
-    # 3️⃣ Create CourseOffering (SAFE now)
+    # 3️⃣ Compute next group number (per course + semester)
+
+    max_group = (
+        db.query(func.max(CourseOffering.group_number))
+        .filter(
+            CourseOffering.course_id == data.course_id,
+            CourseOffering.semester_id == data.semester_id,
+        )
+        .scalar()
+    )
+
+    next_group_number = (max_group or 0) + 1
+
+    # 4️⃣ Create CourseOffering
+
     offering = CourseOffering(
         course_id=data.course_id,
         professor_id=data.professor_id,
         semester_id=data.semester_id,
+        group_number=next_group_number,
         capacity=data.capacity,
         classroom=data.classroom,
         exam_date=data.exam_date,
     )
 
     db.add(offering)
-    db.flush()  # 🔥 important (get offering.id without committing)
+    db.flush()  # get offering.id safely
 
-    # 4️⃣ Create link table rows
+    # 5️⃣ Create link table rows
+
     for slot in slots:
-        link = CourseOfferingScheduleSlot(
-            course_offering_id=offering.id,
-            schedule_slot_id=slot.id,
+        db.add(
+            CourseOfferingScheduleSlot(
+                course_offering_id=offering.id,
+                schedule_slot_id=slot.id,
+            )
         )
-        db.add(link)
 
-    # 5️⃣ Commit ONCE
+    # 6️⃣ Commit once
+
     db.commit()
     db.refresh(offering)
 
@@ -119,13 +146,17 @@ def update_course_offering(
 
     payload = data.dict(exclude_unset=True)
 
-    # 1️⃣ Validate foreign keys ONLY if they are being updated
+    # ❌ Disallow immutable fields
+    immutable_fields = {"course_id", "semester_id"}
+    forbidden = immutable_fields.intersection(payload.keys())
 
-    if "course_id" in payload:
-        course = db.query(Course).filter(Course.id == payload["course_id"]).first()
-        if not course:
-            raise HTTPException(status_code=404, detail="Course not found")
+    if forbidden:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Cannot update immutable fields: {', '.join(forbidden)}",
+        )
 
+    # 1️⃣ Validate professor if updated
     if "professor_id" in payload:
         professor = (
             db.query(User)
@@ -137,15 +168,6 @@ def update_course_offering(
         )
         if not professor:
             raise HTTPException(status_code=404, detail="Professor not found")
-
-    if "semester_id" in payload:
-        semester = (
-            db.query(Semester)
-            .filter(Semester.id == payload["semester_id"])
-            .first()
-        )
-        if not semester:
-            raise HTTPException(status_code=404, detail="Semester not found")
 
     # 2️⃣ Update scalar fields
     for field, value in payload.items():
@@ -168,24 +190,24 @@ def update_course_offering(
                 detail="One or more schedule slots not found",
             )
 
-        # remove old links
         db.query(CourseOfferingScheduleSlot).filter(
             CourseOfferingScheduleSlot.course_offering_id == offering.id
         ).delete()
 
-        # add new links
         for slot in slots:
-            link = CourseOfferingScheduleSlot(
-                course_offering_id=offering.id,
-                schedule_slot_id=slot.id,
+            db.add(
+                CourseOfferingScheduleSlot(
+                    course_offering_id=offering.id,
+                    schedule_slot_id=slot.id,
+                )
             )
-            db.add(link)
 
-    # 4️⃣ Commit ONCE
+    # 4️⃣ Commit once
     db.commit()
     db.refresh(offering)
 
     return offering
+
 
 
 
