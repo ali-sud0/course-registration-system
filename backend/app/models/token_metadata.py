@@ -1,5 +1,7 @@
-from sqlalchemy import Column, DateTime, String, Boolean, ForeignKey, func
-from sqlalchemy.dialects.postgresql import UUID
+# app/models/token_metadata.py
+from sqlalchemy import Column, String, DateTime, Boolean, ForeignKey, func
+from sqlalchemy.dialects.postgresql.base import UUID
+
 from app.core.db import Base
 import uuid
 
