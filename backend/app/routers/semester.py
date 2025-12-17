@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from uuid import UUID
@@ -11,15 +13,6 @@ router = APIRouter(
     prefix="/semesters",
     tags=["semesters"]
 )
-
-# Get a single semester by ID
-@router.get("/{semester_id}", response_model=SemesterOut)
-def get_semester(semester_id: UUID, db: Session = Depends(get_db)):
-    semester = db.query(Semester).filter(Semester.id == semester_id).first()
-    if not semester:
-        raise HTTPException(status_code=404, detail="Semester not found")
-
-    return semester
 
 @router.put(
     "/{semester_id}",
@@ -69,3 +62,20 @@ def update_semester(
     db.commit()
     db.refresh(semester)
     return semester
+
+
+# Get a single semester by ID
+@router.get("/{semester_id}", response_model=SemesterOut)
+def get_semester(semester_id: UUID, db: Session = Depends(get_db)):
+    semester = db.query(Semester).filter(Semester.id == semester_id).first()
+    if not semester:
+        raise HTTPException(status_code=404, detail="Semester not found")
+
+    return semester
+
+
+# Get all semesters
+@router.get("/", response_model=List[SemesterOut])
+def get_semesters(db: Session = Depends(get_db)):
+    semesters = db.query(Semester).all()
+    return semesters

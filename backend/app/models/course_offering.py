@@ -1,6 +1,6 @@
 #app/models/course_offering.py
 
-from sqlalchemy import Column, String, SmallInteger, DateTime, ForeignKey
+from sqlalchemy import Column, String, SmallInteger, DateTime, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
@@ -32,6 +32,11 @@ class CourseOffering(Base):
     semester_id = Column(
         UUID(as_uuid=True),
         ForeignKey("semesters.id"),
+        nullable=False
+    )
+
+    group_number = Column(
+        Integer,
         nullable=False
     )
 
