@@ -75,4 +75,5 @@ def refresh_token(req: RefreshRequest, db: Session = Depends(get_db)):
         "access_token": new_access,
         "refresh_token": req.refresh_token,
         "token_type": "bearer",
+        "role": "undefined"
     }
