@@ -28,6 +28,7 @@ class CourseOfferingUpdate(BaseModel):
 class CourseOfferingOut(CourseOfferingBase):
     id: UUID
     group_number: int # auto-generated, immutable
+    slot_ids: list[UUID] = []
 
     class Config:
         from_attributes = True

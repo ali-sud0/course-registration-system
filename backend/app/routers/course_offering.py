@@ -6,10 +6,11 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
-from app.dependencies import require_role
+from app.dependencies import require_role, get_current_user
 from app.models.course import Course
 from app.models.course_offering import CourseOffering
 from app.models.course_offering_schedule_slot import CourseOfferingScheduleSlot
+from app.models.enrollment import Enrollment, EnrollmentStatus
 from app.models.schedule_slot import ScheduleSlot
 from app.models.semester import Semester
 from app.models.user import User, UserRole
@@ -116,14 +117,44 @@ def create_course_offering(
     return offering
 
 
+# @router.get(
+#     "/",
+#     response_model=list[CourseOfferingOut],
+#     dependencies=[Depends(require_role("Admin"))],
+# )
+# def list_course_offerings(db: Session = Depends(get_db)):
+#     return db.query(CourseOffering).all()
+
 @router.get(
     "/",
     response_model=list[CourseOfferingOut],
     dependencies=[Depends(require_role("Admin"))],
 )
 def list_course_offerings(db: Session = Depends(get_db)):
-    return db.query(CourseOffering).all()
+    # 1️⃣ Fetch all course offerings
+    offerings = db.query(CourseOffering).all()
 
+    # 2️⃣ Fetch all (course_offering_id, schedule_slot_id) pairs
+    rows = db.query(
+        CourseOfferingScheduleSlot.course_offering_id,
+        CourseOfferingScheduleSlot.schedule_slot_id
+    ).all()
+
+    # 3️⃣ Build a mapping: course_offering_id -> list of slot_ids
+    slots_map = {}
+    for course_offering_id, schedule_slot_id in rows:
+        slots_map.setdefault(course_offering_id, []).append(schedule_slot_id)
+
+    # 4️⃣ Build response
+    result = []
+    for o in offerings:
+        # Use from_orm to copy ORM fields
+        offering_out = CourseOfferingOut.from_orm(o).model_copy(
+            update={"slot_ids": slots_map.get(o.id, [])}  # add the slot_ids
+        )
+        result.append(offering_out)
+
+    return result
 
 @router.put(
     "/{offering_id}",
@@ -241,3 +272,33 @@ def delete_course_offering(
 
     return {"message": "Course offering deleted successfully"}
 
+
+@router.get(
+    "/course-offerings/{offering_id}",
+    dependencies=[Depends(require_role("Professor"))],
+)
+def students_in_offering(
+    offering_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    offering = (
+        db.query(CourseOffering)
+        .filter(
+            CourseOffering.id == offering_id,
+            CourseOffering.professor_id == current_user.id,
+        )
+        .first()
+    )
+
+    if not offering:
+        raise HTTPException(status_code=404, detail="Course offering not found")
+
+    return (
+        db.query(Enrollment)
+        .filter(
+            Enrollment.offering_id == offering_id,
+            Enrollment.status == EnrollmentStatus.enrolled,
+        )
+        .all()
+    )
