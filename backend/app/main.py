@@ -1,14 +1,14 @@
 # app/main.py
 from fastapi import FastAPI
 from app.core.db import engine, Base
-from app.routers import auth, protected, prerequisite, semester, course_offering
+from app.routers import auth, protected, prerequisite, semester, course_offering, enrollment
 from app.routers import course
 from fastapi.middleware.cors import CORSMiddleware
 
 import app.models
 
-print(">>> Creating tables...")
-print(">>> Known tables:", Base.metadata.tables.keys())
+# print(">>> Creating tables...")
+# print(">>> Known tables:", Base.metadata.tables.keys())
 
 # create DB tables
 Base.metadata.create_all(bind=engine)
@@ -34,3 +34,4 @@ app.include_router(course.router)
 app.include_router(prerequisite.router)
 app.include_router(semester.router)
 app.include_router(course_offering.router)
+app.include_router(enrollment.router)
