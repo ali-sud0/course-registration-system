@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.db import get_db
 from app.models.course import Course
+from app.models.course_offering import CourseOffering
 from app.models.user import User, UserRole
 from app.schemas.course import CourseCreate, CourseUpdate, CourseOut
 # from app.core.auth import require_role  # already implemented
@@ -48,18 +49,17 @@ def list_courses(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-
-     # Admin → all courses
-    print("admin")
+    # Admin → all courses
     if current_user.role == UserRole.Admin:
         return db.query(Course).all()
 
-    # Professor → only own courses
+    # Professor → courses they teach (via CourseOffering)
     if current_user.role == UserRole.Professor:
-        print("Professor")
         return (
             db.query(Course)
-            .filter(Course.professor_id == current_user.id)
+            .join(CourseOffering, CourseOffering.course_id == Course.id)
+            .filter(CourseOffering.profesor_id == current_user.id)
+            .distinct()
             .all()
         )
 

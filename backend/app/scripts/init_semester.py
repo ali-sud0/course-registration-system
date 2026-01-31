@@ -21,7 +21,8 @@ def seed_semester():
         start_date=date(2025, 9, 23),
         end_date=date(2025, 12, 22),
         min_units=12,
-        max_units=24
+        max_units=24,
+        is_active=True,
     )
 
     db.add(semester)

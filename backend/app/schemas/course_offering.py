@@ -32,3 +32,9 @@ class CourseOfferingOut(CourseOfferingBase):
 
     class Config:
         from_attributes = True
+
+
+class CourseOfferingForStudent(CourseOfferingOut):
+    """Extended schema for student view with course/professor names for display."""
+    course_name: str = ""
+    professor_name: str = ""
