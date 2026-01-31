@@ -48,12 +48,15 @@ def list_courses(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    # Admin → all courses
+
+     # Admin → all courses
+    print("admin")
     if current_user.role == UserRole.Admin:
         return db.query(Course).all()
 
     # Professor → only own courses
     if current_user.role == UserRole.Professor:
+        print("Professor")
         return (
             db.query(Course)
             .filter(Course.professor_id == current_user.id)
