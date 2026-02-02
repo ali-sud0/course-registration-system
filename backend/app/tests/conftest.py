@@ -9,6 +9,7 @@ from app.models.semester import Semester
 from app.models.course_offering import CourseOffering
 from app.models.schedule_slot import ScheduleSlot
 from app.models.course_offering_schedule_slot import CourseOfferingScheduleSlot
+from app.models.enrollment import Enrollment
 
 # SQLite in-memory test DB
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
