@@ -58,12 +58,17 @@ def list_courses(
         return (
             db.query(Course)
             .join(CourseOffering, CourseOffering.course_id == Course.id)
-            .filter(CourseOffering.profesor_id == current_user.id)
+            .filter(CourseOffering.professor_id == current_user.id)
             .distinct()
             .all()
         )
 
     # Everyone else → forbidden
+    # Students should be able to see course names/codes so front-end can
+    # display them when rendering offerings. Return all courses for students.
+    if current_user.role == UserRole.Student:
+        return db.query(Course).all()
+
     raise HTTPException(
         status_code=403,
         detail="You do not have permission to view courses",
