@@ -5,7 +5,8 @@ from app.core.db import get_db
 from app.models.prerequisite import Prerequisite
 from app.routers.utils.prerequisiteHelper import has_cycle
 from app.schemas.prerequisite import PrerequisiteCreate, PrerequisiteUpdate, PrerequisiteOut
-from app.dependencies import require_role
+from app.dependencies import require_role, get_current_user
+from app.models.user import User
 
 router = APIRouter(
     prefix="/prerequisites",
@@ -38,8 +39,9 @@ def create_prerequisite(data: PrerequisiteCreate, db: Session = Depends(get_db))
     return prereq
 
 # READ ALL
-@router.get("/", response_model=list[PrerequisiteOut], dependencies=[Depends(require_role("Admin"))])
-def list_prerequisites(db: Session = Depends(get_db)):
+@router.get("/", response_model=list[PrerequisiteOut])
+def list_prerequisites(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    # Allow any authenticated user to view prerequisites (read-only)
     return db.query(Prerequisite).all()
 
 # UPDATE
