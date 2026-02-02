@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>درسینو - اساتید</title>
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+  <link rel="stylesheet" href="../static/css/courses.css">
+  <style>
+    .professor-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .professor-card:hover {
+      border-color: #4338ca;
+      box-shadow: 0 1px 3px rgba(67, 56, 202, 0.1);
+    }
+
+    .professor-info {
+      flex: 1;
+    }
+
+    .professor-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    .professor-details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-label {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-size: 14px;
+      color: #374151;
+      font-weight: 500;
+    }
+
+    .professor-list {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .professor-details {
+        grid-template-columns: 1fr;
+      }
+
+      .professor-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="../static/images/logo.png" alt="لوگو" class="logo">
+        <div class="brand-title">درسینو</div>
+      </div>
+      <nav class="menu">
+        <a id="menuCourses" href="/page/courses">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M9.99996 5.83333V17.5M9.99996 5.83333C9.99996 4.94928 9.64877 4.10143 9.02365 3.47631C8.39853 2.85119 7.55068 2.5 6.66663 2.5H2.49996C2.27895 2.5 2.06698 2.5878 1.9107 2.74408C1.75442 2.90036 1.66663 3.11232 1.66663 3.33333V14.1667C1.66663 14.3877 1.75442 14.5996 1.9107 14.7559C2.06698 14.9122 2.27895 15 2.49996 15H7.49996C8.163 15 8.79889 15.2634 9.26773 15.7322C9.73657 16.2011 9.99996 16.837 9.99996 17.5M9.99996 5.83333C9.99996 4.94928 10.3511 4.10143 10.9763 3.47631C11.6014 2.85119 12.4492 2.5 13.3333 2.5H17.5C17.721 2.5 17.9329 2.5878 18.0892 2.74408C18.2455 2.90036 18.3333 3.11232 18.3333 3.33333V14.1667C18.3333 14.3877 18.2455 14.5996 18.0892 14.7559C17.9329 14.9122 17.721 15 17.5 15H12.5C11.8369 15 11.201 15.2634 10.7322 15.7322C10.2634 16.2011 9.99996 16.837 9.99996 17.5M13.3333 10H15M13.3333 6.66667H15M4.99996 10H6.66663M4.99996 6.66667H6.66663"
+                stroke="#475569" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">دروس</p>
+          </div>
+        </a>
+        <a id="menuProfessors" href="/page/professors">
+          <div class="menu-item active">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M18.3334 8.33337V13.3334M5.00004 10.4167V13.3334C5.00004 13.9964 5.52682 14.6323 6.46451 15.1011C7.40219 15.57 8.67396 15.8334 10 15.8334C11.3261 15.8334 12.5979 15.57 13.5356 15.1011C14.4733 14.6323 15 13.9964 15 13.3334V10.4167M17.8501 9.1018C17.9993 9.03599 18.1259 8.92786 18.2142 8.7908C18.3025 8.65375 18.3487 8.49379 18.347 8.33075C18.3453 8.16771 18.2958 8.00874 18.2047 7.87354C18.1136 7.73834 17.9848 7.63285 17.8342 7.57013L10.6917 4.3168C10.4746 4.21776 10.2387 4.1665 10.0001 4.1665C9.76142 4.1665 9.52554 4.21776 9.30841 4.3168L2.16674 7.5668C2.01838 7.63178 1.89217 7.73858 1.80355 7.87415C1.71492 8.00971 1.66772 8.16817 1.66772 8.33014C1.66772 8.4921 1.71492 8.65055 1.80355 8.78612C1.89217 8.92169 2.01838 9.02849 2.16674 9.09347L9.30841 12.3501C9.52554 12.4492 9.76142 12.5004 10.0001 12.5004C10.2387 12.5004 10.4746 12.4492 10.6917 12.3501L17.8501 9.1018Z"
+                stroke="#4338CA" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text active">اساتید</p>
+          </div>
+        </a>
+        <a id="menuStudents" href="/page/students">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15 17.5C15 15.7319 14.2976 14.0362 13.0473 12.786C11.7971 11.5357 10.1014 10.8333 8.33329 10.8333M8.33329 10.8333C6.56518 10.8333 4.86949 11.5357 3.61925 12.786C2.36901 14.0362 1.66663 15.7319 1.66663 17.5M8.33329 10.8333C10.6345 10.8333 12.5 8.96785 12.5 6.66667C12.5 4.36548 10.6345 2.5 8.33329 2.5C6.03211 2.5 4.16663 4.36548 4.16663 6.66667C4.16663 8.96785 6.03211 10.8333 8.33329 10.8333ZM18.3333 16.6668C18.3333 13.8585 16.6667 11.2502 15 10.0002C15.5478 9.58914 15.9859 9.0494 16.2755 8.42872C16.565 7.80804 16.6971 7.12555 16.66 6.44166C16.6229 5.75777 16.4178 5.09357 16.0629 4.50783C15.7079 3.92209 15.2141 3.43288 14.625 3.0835"
+                stroke="#475569" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">دانشجویان</p>
+          </div>
+        </a>
+        <a id="menuProfCourses" href="/page/professor-courses">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 2H15C15.5304 2 16.0391 2.21071 16.4142 2.58579C16.7893 2.96086 17 3.46957 17 4V16C17 16.5304 16.7893 17.0391 16.4142 17.4142C16.0391 17.7893 15.5304 18 15 18H5C4.46957 18 3.96086 17.7893 3.58579 17.4142C3.21071 17.0391 3 16.5304 3 16V4C3 3.46957 3.21071 2.96086 3.58579 2.58579C3.96086 2.21071 4.46957 2 5 2M10 5V12M7 8H13" stroke="#475569" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">دروس ارائه‌شده</p>
+          </div>
+        </a>
+
+        <a id="menuSettings" href="/professors/settings">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M8.05918 3.44663C8.10509 2.96358 8.32945 2.515 8.68843 2.18853C9.0474 1.86206 9.5152 1.68115 10.0004 1.68115C10.4857 1.68115 10.9535 1.86206 11.3124 2.18853C11.6714 2.515 11.8958 2.96358 11.9417 3.44663C11.9693 3.75868 12.0716 4.05948 12.2401 4.32358C12.4086 4.58768 12.6382 4.8073 12.9096 4.96386C13.1809 5.12042 13.486 5.2093 13.7989 5.22298C14.1119 5.23666 14.4235 5.17474 14.7075 5.04246C15.1484 4.84228 15.6481 4.81331 16.1092 4.9612C16.5703 5.10909 16.9599 5.42326 17.2021 5.84255C17.4443 6.26185 17.5219 6.75627 17.4197 7.22961C17.3175 7.70294 17.0428 8.12131 16.6492 8.4033C16.3928 8.58317 16.1836 8.82214 16.0391 9.09998C15.8946 9.37783 15.8192 9.68639 15.8192 9.99955C15.8192 10.3127 15.8946 10.6213 16.0391 10.8991C16.1836 11.177 16.3928 11.4159 16.6492 11.5958C17.0428 11.8778 17.3175 12.2962 17.4197 12.7695C17.5219 13.2428 17.4443 13.7372 17.2021 14.1565C16.9599 14.5758 16.5703 14.89 16.1092 15.0379C15.6481 15.1858 15.1484 15.1568 14.7075 14.9566C14.4235 14.8244 14.1119 14.7624 13.7989 14.7761C13.486 14.7898 13.1809 14.8787 12.9096 15.0352C12.6382 15.1918 12.4086 15.4114 12.2401 15.6755C12.0716 15.9396 11.9693 16.2404 11.9417 16.5525C11.8958 17.0355 11.6714 17.4841 11.3124 17.8106C10.9535 18.137 10.4857 18.3179 10.0004 18.3179C9.5152 18.3179 9.0474 18.137 8.68843 17.8106C8.32945 17.4841 8.10509 17.0355 8.05918 16.5525C8.03163 16.2403 7.92926 15.9394 7.76073 15.6752C7.5922 15.411 7.36249 15.1913 7.09104 15.0347C6.81959 14.8782 6.5144 14.7893 6.20133 14.7757C5.88825 14.7621 5.57651 14.8242 5.29251 14.9566C4.85158 15.1568 4.35195 15.1858 3.89084 15.0379C3.42974 14.89 3.04015 14.5758 2.79791 14.1565C2.55567 13.7372 2.47811 13.2428 2.58031 12.7695C2.68251 12.2962 2.95718 11.8778 3.35084 11.5958C3.60719 11.4159 3.81645 11.177 3.96092 10.8991C4.10538 10.6213 4.1808 10.3127 4.1808 9.99955C4.1808 9.68639 4.10538 9.37783 3.96092 9.09998C3.81645 8.82214 3.60719 8.58317 3.35084 8.4033C2.95773 8.12117 2.68355 7.70296 2.58159 7.22995C2.47964 6.75694 2.55718 6.26291 2.79916 5.84389C3.04114 5.42487 3.43027 5.11078 3.89092 4.96266C4.35157 4.81455 4.85083 4.84299 5.29168 5.04246C5.57564 5.17474 5.8873 5.23666 6.20026 5.22298C6.51322 5.2093 6.81829 5.12042 7.08962 4.96386C7.36096 4.8073 7.59059 4.58768 7.75906 4.32358C7.92754 4.05948 8.02991 3.75868 8.05751 3.44663M12.5 10C12.5 11.3808 11.3807 12.5 10 12.5C8.6193 12.5 7.50001 11.3808 7.50001 10C7.50001 8.61933 8.6193 7.50004 10 7.50004C11.3807 7.50004 12.5 8.61933 12.5 10Z"
+                stroke="#475569" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">تنظیمات</p>
+          </div>
+        </a>
+      </nav>
+      <button id="logoutBtn" class="btn btn-logout">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M13.3333 14.1667L17.5 10M17.5 10L13.3333 5.83333M17.5 10H7.5M7.5 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V4.16667C2.5 3.72464 2.67559 3.30072 2.98816 2.98816C3.30072 2.67559 3.72464 2.5 4.16667 2.5H7.5"
+            stroke="#EF4444" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>خروج از حساب</span>
+      </button>
+    </aside>
+
+    <main class="main-content">
+      <section class="navbar">
+        <span id="navbarTitle">سلام </span>
+        <label>خوش آمدید!</label>
+      </section>
+
+      <div class="main-body">
+        <div class="text-header">
+          <div class="text-container">
+            <h2>اساتید</h2>
+            <p class="small-muted">لیست تمام اساتید سیستم</p>
+          </div>
+        </div>
+
+        <div class="professor-list" id="professorList">
+          <!-- Professors will be loaded here -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" style="display: none;">
+    <strong id="toastTitle">اطلاع</strong>
+    <p id="toastDesc">پیام</p>
+  </div>
+
+  <script src="../static/js/professors.js"></script>
+</body>
+
+</html>

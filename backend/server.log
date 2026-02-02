@@ -1,0 +1,100 @@
+nohup: ignoring input
+/home/unline/.local/lib/python3.12/site-packages/pydantic/_internal/_config.py:383: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+INFO:     Started server process [47175]
+INFO:     Waiting for application startup.
+[1m============================= test session starts ==============================[0m
+platform linux -- Python 3.12.3, pytest-7.4.3, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/unline/Desktop/CRS-Back-Front/course-registration-system/backend
+plugins: cov-4.1.0, asyncio-0.21.1, anyio-4.11.0
+asyncio: mode=Mode.STRICT
+[1mcollecting ... [0mcollected 33 items
+
+app/tests/test_api.py::TestAuthEndpoints::test_register_user [32mPASSED[0m[33m      [  3%][0m
+app/tests/test_api.py::TestAuthEndpoints::test_login_user [32mPASSED[0m[33m         [  6%][0m
+app/tests/test_api.py::TestAuthEndpoints::test_invalid_login [32mPASSED[0m[33m      [  9%][0m
+app/tests/test_api.py::TestCourseEndpoints::test_get_courses [32mPASSED[0m[33m      [ 12%][0m
+app/tests/test_api.py::TestCourseEndpoints::test_create_course [32mPASSED[0m[33m    [ 15%][0m
+app/tests/test_api.py::TestHealthCheck::test_root_endpoint [32mPASSED[0m[33m        [ 18%][0m
+app/tests/test_api.py::TestHealthCheck::test_api_accessible [32mPASSED[0m[33m       [ 21%][0m
+app/tests/test_api.py::TestErrorHandling::test_invalid_endpoint [32mPASSED[0m[33m   [ 24%][0m
+app/tests/test_api.py::TestErrorHandling::test_malformed_json [32mPASSED[0m[33m     [ 27%][0m
+app/tests/test_course.py::test_create_course [32mPASSED[0m[33m                      [ 30%][0m
+app/tests/test_integration.py::TestEnrollmentWorkflow::test_student_enrollment_workflow [32mPASSED[0m[33m [ 33%][0m
+app/tests/test_integration.py::TestEnrollmentWorkflow::test_multiple_enrollments_same_student [32mPASSED[0m[33m [ 36%][0m
+app/tests/test_integration.py::TestCourseOfferingManagement::test_course_capacity_management [32mPASSED[0m[33m [ 39%][0m
+app/tests/test_integration.py::TestCourseOfferingManagement::test_multiple_offerings_same_course [32mPASSED[0m[33m [ 42%][0m
+app/tests/test_integration.py::TestSemesterManagement::test_semester_organization [32mPASSED[0m[33m [ 45%][0m
+app/tests/test_integration.py::TestUserRoles::test_role_based_user_creation [32mPASSED[0m[33m [ 48%][0m
+app/tests/test_integration.py::TestUserRoles::test_user_suspension [32mPASSED[0m[33m [ 51%][0m
+app/tests/test_models.py::TestCourseModel::test_create_course [32mPASSED[0m[33m     [ 54%][0m
+app/tests/test_models.py::TestCourseModel::test_course_code_unique [32mPASSED[0m[33m [ 57%][0m
+app/tests/test_models.py::TestCourseModel::test_fetch_course_by_code [32mPASSED[0m[33m [ 60%][0m
+app/tests/test_models.py::TestCourseModel::test_course_units_validation [32mPASSED[0m[33m [ 63%][0m
+app/tests/test_models.py::TestUserModel::test_create_student [32mPASSED[0m[33m      [ 66%][0m
+app/tests/test_models.py::TestUserModel::test_create_professor [32mPASSED[0m[33m    [ 69%][0m
+app/tests/test_models.py::TestUserModel::test_create_admin [32mPASSED[0m[33m        [ 72%][0m
+app/tests/test_models.py::TestUserModel::test_user_number_unique [32mPASSED[0m[33m  [ 75%][0m
+app/tests/test_models.py::TestUserModel::test_user_suspension [32mPASSED[0m[33m     [ 78%][0m
+app/tests/test_models.py::TestEnrollmentModel::test_create_enrollment [32mPASSED[0m[33m [ 81%][0m
+app/tests/test_models.py::TestEnrollmentModel::test_enrollment_status_transitions [32mPASSED[0m[33m [ 84%][0m
+app/tests/test_models.py::TestSemesterModel::test_create_semester [32mPASSED[0m[33m [ 87%][0m
+app/tests/test_models.py::TestSemesterModel::test_fetch_semester_by_active [32mPASSED[0m[33m [ 90%][0m
+app/tests/test_models.py::TestScheduleSlotModel::test_create_schedule_slot [32mPASSED[0m[33m [ 93%][0m
+app/tests/test_models.py::TestCourseOfferingModel::test_create_course_offering [32mPASSED[0m[33m [ 96%][0m
+app/tests/test_models.py::TestCourseOfferingModel::test_course_offering_with_professor [32mPASSED[0m[33m [100%][0m
+
+[33m=============================== warnings summary ===============================[0m
+../../../../.local/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/unline/.local/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+app/schemas/prerequisite.py:21
+  /home/unline/Desktop/CRS-Back-Front/course-registration-system/backend/app/schemas/prerequisite.py:21: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class PrerequisiteOut(PrerequisiteBase):
+
+app/schemas/semester.py:28
+  /home/unline/Desktop/CRS-Back-Front/course-registration-system/backend/app/schemas/semester.py:28: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class SemesterOut(SemesterBase):
+
+../../../../.local/lib/python3.12/site-packages/pydantic/_internal/_config.py:383
+  /home/unline/.local/lib/python3.12/site-packages/pydantic/_internal/_config.py:383: UserWarning: Valid config keys have changed in V2:
+  * 'orm_mode' has been renamed to 'from_attributes'
+    warnings.warn(message, UserWarning)
+
+app/schemas/course_offering.py:28
+  /home/unline/Desktop/CRS-Back-Front/course-registration-system/backend/app/schemas/course_offering.py:28: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class CourseOfferingOut(CourseOfferingBase):
+
+app/schemas/course.py:23
+  /home/unline/Desktop/CRS-Back-Front/course-registration-system/backend/app/schemas/course.py:23: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class CourseOut(CourseBase):
+
+app/tests/test_api.py::TestErrorHandling::test_malformed_json
+  /home/unline/.local/lib/python3.12/site-packages/httpx/_content.py:204: DeprecationWarning: Use 'content=<...>' to upload raw bytes/text content.
+    warnings.warn(message, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+[33m======================== [32m33 passed[0m, [33m[1m7 warnings[0m[33m in 0.71s[0m[33m ========================[0m
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 8000): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+
+======================================================================
+SERVER STARTUP - Running Unit Tests
+======================================================================
+
+======================================================================
+RUNNING UNIT TESTS
+======================================================================
+
+
+======================================================================
+✓ ALL TESTS PASSED
+======================================================================
+
+
+Server shutting down...

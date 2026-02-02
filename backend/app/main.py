@@ -11,7 +11,6 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import app.models
-from app.tests.test_runner import run_tests
 
 # print(">>> Creating tables...")
 # print(">>> Known tables:", Base.metadata.tables.keys())
@@ -20,17 +19,13 @@ from app.tests.test_runner import run_tests
 Base.metadata.create_all(bind=engine)
 
 
-# Startup event - run tests when server starts
+# Startup event
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Run tests
+    # Startup
     print("\n" + "="*70)
-    print("SERVER STARTUP - Running Unit Tests")
+    print("SERVER STARTED - Course Registration System Backend")
     print("="*70)
-    tests_passed = run_tests()
-    
-    if not tests_passed:
-        print("\n⚠️  WARNING: Some tests failed, but server is continuing...")
     
     yield
     
