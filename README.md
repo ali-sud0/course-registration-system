@@ -235,7 +235,7 @@ The system includes comprehensive seeding scripts that create the database schem
 **Run the master seed script** (this is the easiest method):
 
 ```bash
-python3 app/scripts/seed_all.py
+python3 -m app.scripts.seed_all
 ```
 
 This single command will:
@@ -757,3 +757,4 @@ See the LICENSE file in the project root.
 **System Version:** 1.0  
 **Python Version Required:** 3.10+  
 **PostgreSQL Version Required:** 12+
+=======
