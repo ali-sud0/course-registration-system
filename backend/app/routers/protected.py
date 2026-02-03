@@ -15,6 +15,21 @@ router = APIRouter(prefix="/me", tags=["me"])
 def read_me(current_user = Depends(get_current_user)):
     return current_user
 
+@router.get("/enrollments", dependencies=[Depends(require_role("Student"))])
+def my_enrollments(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Get current user's enrollments (student endpoint)"""
+    return (
+        db.query(Enrollment)
+        .filter(
+            Enrollment.student_id == current_user.id,
+            Enrollment.status == EnrollmentStatus.enrolled,
+        )
+        .all()
+    )
+
 @router.get("/admin-only")
 def admin_only(user = Depends(require_role("Admin"))):
     return {"msg": f"Hello Admin [{user.first_name} {user.last_name}]"}

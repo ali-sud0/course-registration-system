@@ -1,12 +1,19 @@
 # app/scripts/init_semester.py
 from sqlalchemy.orm import Session
 import uuid
-from datetime import date
+from datetime import date, timedelta
 
 from app.core.db import SessionLocal, Base, engine
 from app.models.semester import Semester
 
+
 def seed_semester():
+    """Ensure only semester '1404-1' exists and is active.
+
+    This function will remove any other semesters from the database,
+    create `1404-1` if missing, and set it as active with dates
+    that include today.
+    """
     db: Session = SessionLocal()
 
     # Check if semester already exists

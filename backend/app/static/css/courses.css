@@ -244,6 +244,7 @@ table, thead{
 
 .table-head > :nth-child(1){flex-grow: 2;}
 .table-head > :nth-child(7){flex-grow: 2;}
+.table-head > :nth-child(8){flex-grow: 0.5;}
 .table-head > :nth-child(9){flex-grow: 0.5;}
 
 
@@ -263,6 +264,7 @@ table, thead{
 }
 .table-body > :nth-child(1){flex-grow: 2;}
 .table-body > :nth-child(7){flex-grow: 2;}
+.table-body > :nth-child(8){flex-grow: 0.5;}
 .table-body > :nth-child(9){flex-grow: 0.5;}
 
 .more-actions{
@@ -341,28 +343,20 @@ table, thead{
   color: var(--color-text-tertiary);
 }
 
-.prerequire{
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 100%;
-  padding: 0px 24px 16px 24px;
-  margin-top: 16px;
-  background-color: var(--color-bg);
-  border-radius: 16px;
+.prerequire {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    padding: 24px 16px;
+    margin-top: 16px;
+    background-color: #fff;
+    border-radius: 16px;
 }
 
 #addPrerequire{
   width: 150px;
 }
-
-.prerequire-table-head > :nth-child(1){flex-grow: 0.5;}
-.prerequire-table-head > :nth-child(2){text-align: right;}
-.prerequire-table-head > :nth-child(3){flex-grow: 0.1;}
-
-.prerequire-table-body > :nth-child(1){flex-grow: 0.5 !important;}
-.prerequire-table-body > :nth-child(2){text-align: right !important;}
-.prerequire-table-body > :nth-child(3){flex-grow: 0.1 !important;}
 
 /* ---------------- Menu Wrapper ---------------- */
 

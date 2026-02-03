@@ -131,7 +131,6 @@ def create_course_offering(
 @router.get(
     "/",
     response_model=list[CourseOfferingOut],
-    dependencies=[Depends(require_role("Admin"))],
 )
 def list_course_offerings(db: Session = Depends(get_db)):
     # 1️⃣ Fetch all course offerings with course and professor details

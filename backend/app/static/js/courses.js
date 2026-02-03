@@ -57,7 +57,7 @@ let canShowRemoveAlert = true;
 let editingPrerequireIndex = null;
 
 
-const BASE_URL = 'http://127.0.0.1:8023'; // آدرس سرور واقعی
+const BASE_URL = 'http://127.0.0.1:8000'; // آدرس سرور واقعی
 
 // ---------- توابع ---------- //
 
@@ -674,14 +674,14 @@ function handleJwtExpire(response) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
 
-    window.location.href = "./login.html";
+    window.location.href = "/login";
     return;
   }
 }
 
 
 // ---------- خروج ---------- //
-if (logoutBtn) logoutBtn.addEventListener('click', () => window.location.href = 'login.html');
+if (logoutBtn) logoutBtn.addEventListener('click', () => window.location.href = '/login');
 
 // ---------- جستجو ---------- //
 if (btnFilter) btnFilter.addEventListener('click', applyFilter);

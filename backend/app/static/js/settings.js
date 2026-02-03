@@ -15,15 +15,9 @@ const toastTitle = document.getElementById('toastTitle');
 const toastDesc = document.getElementById('toastDesc');
 
 
-const BASE_URL = 'http://127.0.0.1:8023'; // آدرس سرور واقعی
+const BASE_URL = 'http://127.0.0.1:8000'; // آدرس سرور واقعی
 
 // ---------- توابع ---------- //
-
-btnSave.addEventListener('click', async e => {
-    e.preventDefault();
-
-    sendUnitsLimits();
-});
 
 if (getUserRole() === "Admin") {
   navbarTitle.innerText = "سلام ادمین";
@@ -31,49 +25,6 @@ if (getUserRole() === "Admin") {
   navbarTitle.innerText = "سلام استاد";
 } else if (getUserRole() === "Student") {
   navbarTitle.innerText = "سلام دانشجو عزیز";
-}
-
-
-
-async function sendUnitsLimits() {
-  const min = minUnits.value.trim();
-  const max = maxUnits.value.trim();
-
-    const semester = {
-      id: "0c77581b-4e92-4be6-9dd9-0c1c64cf1669",
-      name: "1401-1",
-      start_date: "2025-12-16",
-      end_date: "2026-12-16",
-      min_units: min,
-      max_units: max
-    };
-
-    if (!semester.min_units || !semester.max_units) {
-      alert('حداقل و حداکثر واحد را وارد کنید');
-      return;
-    }
-
-    try {
-      const response = await fetch(BASE_URL + "/semesters/" + semester.id, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer " + localStorage.getItem("accessToken")
-        },
-        body: JSON.stringify(semester)
-      });
-      if (!response.ok) {
-        showToast('failed', "خطا", 'خطا در ویرایش حداقل و حداکثر واحد');
-      } else {
-        showToast('success', "موفق", 'اطلاعات با موفقیت ذخیره شد');
-      }
-      handleJwtExpire(response);
-
-    } catch (err) {
-      console.error('خطای شبکه:', err);
-    }
-
-
 }
 
 function showToast(status, title, desc) {
@@ -111,46 +62,111 @@ function handleJwtExpire(response) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
 
-    window.location.href = "./login.html";
+    window.location.href = "/login";
     return;
   }
 }
 
 async function getMinMaxUnits(id){
-  let newList = [];
   try {
-      const response = await fetch(BASE_URL + "/semesters/" + id, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer " + localStorage.getItem("accessToken")
-        }
-      });
-      if (!response.ok) {
-        console.warn('ارسال به سرور موفق نبود');
-      } else {
-        list = await response.json();
-        newList = list;
-
-        minUnits.value = newList.min_units;
-        maxUnits.value = newList.max_units;
+    const response = await fetch(BASE_URL + "/semesters/" + id, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer " + localStorage.getItem("accessToken")
       }
-      handleJwtExpire(response);
-
-
-    } catch (err) {
-      console.error('خطای شبکه:', err);
+    });
+    if (response.ok) {
+      const data = await response.json();
+      minUnits.value = data.min_units || '';
+      maxUnits.value = data.max_units || '';
+    } else {
+      console.warn('ارسال به سرور موفق نبود');
     }
+    handleJwtExpire(response);
+  } catch (err) {
+    console.error('خطای شبکه:', err);
+  }
 }
 
 
+// Get active semester ID
+let activeSemesterId = null;
+
+async function fetchActiveSemester() {
+  try {
+    const response = await fetch(BASE_URL + "/semesters/active/current", {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer " + localStorage.getItem("accessToken")
+      }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      activeSemesterId = data.id;
+      await getMinMaxUnits(data.id);
+    } else {
+      console.warn('Failed to fetch active semester');
+    }
+  } catch (err) {
+    console.error('خطای شبکه:', err);
+  }
+}
+
+async function sendUnitsLimitsWithActiveSemester() {
+  if (!activeSemesterId) {
+    alert('نتوانست ترم فعال را یافت کند. لطفا صفحه را دوباره بارگذاری کنید');
+    return;
+  }
+  
+  const min = minUnits.value.trim();
+  const max = maxUnits.value.trim();
+
+  if (!min || !max) {
+    alert('حداقل و حداکثر واحد را وارد کنید');
+    return;
+  }
+
+  try {
+    const response = await fetch(BASE_URL + "/semesters/" + activeSemesterId, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer " + localStorage.getItem("accessToken")
+      },
+      body: JSON.stringify({
+        min_units: parseInt(min),
+        max_units: parseInt(max)
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      showToast('failed', "خطا", errorData.detail || 'خطا در ویرایش حداقل و حداکثر واحد');
+    } else {
+      showToast('success', "موفق", 'اطلاعات با موفقیت ذخیره شد');
+    }
+    handleJwtExpire(response);
+  } catch (err) {
+    console.error('خطای شبکه:', err);
+    showToast('failed', "خطا", 'خطای شبکه');
+  }
+}
+
+// Override button handler to use active semester
+btnSave.removeEventListener('click', () => sendUnitsLimits());
+btnSave.addEventListener('click', async e => {
+  e.preventDefault();
+  await sendUnitsLimitsWithActiveSemester();
+});
+
 // ---------- خروج ---------- //
-if (logoutBtn) logoutBtn.addEventListener('click', () => window.location.href = 'login.html');
+if (logoutBtn) logoutBtn.addEventListener('click', () => window.location.href = '/login');
 
 
 // ---------- بارگذاری اولیه ---------- //
 document.addEventListener('DOMContentLoaded', async () => {
-  //await renderPrerequires();  // بعد prerequires
-  getMinMaxUnits("0c77581b-4e92-4be6-9dd9-0c1c64cf1669");
+  await fetchActiveSemester();
 });
 
