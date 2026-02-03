@@ -177,7 +177,7 @@ function renderScheduleTable(scheduleItems) {
 
 function renderEnrolledList(enrollments, courseMap = {}) {
   if (!enrollments || enrollments.length === 0) {
-    enrolledList.innerHTML = '<div class="empty-state"><p>هیچ دروسی ثبت نشده است</p></div>';
+    enrolledList.innerHTML = '<div class="empty-enrolled-state"><h3>هیچ دروسی ثبت نشده است</h3><p>برای ثبت درس به بخش انتخاب واحد بروید</p></div>';
     return;
   }
 
@@ -186,12 +186,45 @@ function renderEnrolledList(enrollments, courseMap = {}) {
     const offering = courseMap[enr.offering_id] || {};
     const item = document.createElement('div');
     item.className = 'enrolled-item';
+    
+    // Format time if available
+    const timeDisplay = offering.start_time && offering.end_time 
+      ? `${offering.start_time} - ${offering.end_time}` 
+      : 'زمان نامشخص';
+    
+    // Format day of week
+    const dayMap = { 'sat': 'شنبه', 'sun': 'یکشنبه', 'mon': 'دوشنبه', 'tue': 'سه‌شنبه', 'wed': 'چهارشنبه' };
+    const dayDisplay = dayMap[offering.day_of_week] || 'روز نامشخص';
+    
     item.innerHTML = `
       <div class="info">
         <div class="name">${offering.course_name || 'درس نامشخص'}</div>
-        <div class="time">گروه ${offering.group_number || '-'} | استاد: ${offering.professor_name || 'نامشخص'}</div>
+        <div class="course-meta">
+          <div class="meta-item">
+            <span class="meta-label">کد درس:</span>
+            <span class="meta-value">${offering.course_code || '-'}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">گروه:</span>
+            <span class="meta-value">${offering.group_number || '-'}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">استاد:</span>
+            <span class="meta-value">${offering.professor_name || 'نامشخص'}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">زمان:</span>
+            <span class="meta-value">${dayDisplay} - ${timeDisplay}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">کلاس:</span>
+            <span class="meta-value">${offering.classroom || 'کلاس نامشخص'}</span>
+          </div>
+        </div>
       </div>
-      <button class="btn" style="background:#EF4444;color:white;" onclick="dropCourse('${enr.id}')">حذف</button>
+      <div class="enrolled-actions">
+        <button class="drop-btn" onclick="dropCourse('${enr.id}')">حذف درس</button>
+      </div>
     `;
     enrolledList.appendChild(item);
   });
@@ -247,17 +280,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   const enrollments = await fetchMyEnrollments();
   
   // Build a map from offering_id to offering details
+  // First populate from schedule items (which have time data)
   const offeringMap = {};
   if (scheduleItems && scheduleItems.length > 0) {
-    // Try to fetch offering details; for now use schedule items info
     scheduleItems.forEach(item => {
       if (!offeringMap[item.offering_id]) {
-        offeringMap[item.offering_id] = item;
+        offeringMap[item.offering_id] = {
+          course_name: item.course_name,
+          course_code: item.course_code,
+          group_number: item.group_number,
+          professor_name: item.professor_name,
+          classroom: item.classroom,
+          day_of_week: item.day_of_week,
+          start_time: item.start_time,
+          end_time: item.end_time
+        };
       }
     });
   }
 
-  // Fetch current semester offerings to get full details
+  // Fetch current semester offerings to get additional details
   try {
     const resp = await fetch(BASE_URL + '/course-offerings/for-current-term', {
       method: 'GET',
@@ -269,7 +311,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (resp.ok) {
       const offerings = await resp.json();
       offerings.forEach(off => {
-        offeringMap[off.id] = off;
+        // Merge offering data with schedule data
+        if (offeringMap[off.id]) {
+          offeringMap[off.id] = { ...offeringMap[off.id], ...off };
+        } else {
+          offeringMap[off.id] = off;
+        }
       });
     }
   } catch (err) {
