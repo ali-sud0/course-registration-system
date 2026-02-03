@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.db import get_db
 from app.models.course import Course
+from app.models.course_offering import CourseOffering
 from app.models.user import User, UserRole
 from app.schemas.course import CourseCreate, CourseUpdate, CourseOut
 # from app.core.auth import require_role  # already implemented
@@ -48,22 +49,26 @@ def list_courses(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-
-     # Admin → all courses
-    print("admin")
+    # Admin → all courses
     if current_user.role == UserRole.Admin:
         return db.query(Course).all()
 
-    # Professor → only own courses
+    # Professor → courses they teach (via CourseOffering)
     if current_user.role == UserRole.Professor:
-        print("Professor")
         return (
             db.query(Course)
-            .filter(Course.professor_id == current_user.id)
+            .join(CourseOffering, CourseOffering.course_id == Course.id)
+            .filter(CourseOffering.professor_id == current_user.id)
+            .distinct()
             .all()
         )
 
     # Everyone else → forbidden
+    # Students should be able to see course names/codes so front-end can
+    # display them when rendering offerings. Return all courses for students.
+    if current_user.role == UserRole.Student:
+        return db.query(Course).all()
+
     raise HTTPException(
         status_code=403,
         detail="You do not have permission to view courses",

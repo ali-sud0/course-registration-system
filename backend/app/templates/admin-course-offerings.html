@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>درسینو - گروه‌های درسی (ادمین)</title>
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+  <link rel="stylesheet" href="../static/css/courses.css">
+</head>
+
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="../static/images/logo.png" alt="لوگو" class="logo">
+        <div class="brand-title">درسینو</div>
+      </div>
+      <nav class="menu">
+        <a id="menuCourses" href="/admin/courses">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.99996 5.83333V17.5M9.99996 5.83333C9.99996 4.94928 9.64877 4.10143 9.02365 3.47631C8.39853 2.85119 7.55068 2.5 6.66663 2.5H2.49996C2.27895 2.5 2.06698 2.5878 1.9107 2.74408C1.75442 2.90036 1.66663 3.11232 1.66663 3.33333V14.1667C1.66663 14.3877 1.75442 14.5996 1.9107 14.7559C2.06698 14.9122 2.27895 15 2.49996 15H7.49996C8.163 15 8.79889 15.2634 9.26773 15.7322C9.73657 16.2011 9.99996 16.837 9.99996 17.5M9.99996 5.83333C9.99996 4.94928 10.3511 4.10143 10.9763 3.47631C11.6014 2.85119 12.4492 2.5 13.3333 2.5H17.5C17.721 2.5 17.9329 2.5878 18.0892 2.74408C18.2455 2.90036 18.3333 3.11232 18.3333 3.33333V14.1667C18.3333 14.3877 18.2455 14.5996 18.0892 14.7559C17.9329 14.9122 17.721 15 17.5 15H12.5C11.8369 15 11.201 15.2634 10.7322 15.7322C10.2634 16.2011 9.99996 16.837 9.99996 17.5M13.3333 10H15M13.3333 6.66667H15M4.99996 10H6.66663M4.99996 6.66667H6.66663" stroke="#4338CA" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">دروس</p>
+          </div>
+        </a>
+        <a id="menuOfferedCourses" href="/admin/course-offerings">
+          <div class="menu-item active">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.33333 2.5H16.6667C17.5871 2.5 18.3333 3.24619 18.3333 4.16667V15.8333C18.3333 16.7538 17.5871 17.5 16.6667 17.5H3.33333C2.41286 17.5 1.66667 16.7538 1.66667 15.8333V4.16667C1.66667 3.24619 2.41286 2.5 3.33333 2.5ZM3.33333 5H16.6667M3.33333 8.33333H16.6667M3.33333 11.6667H13.3333" stroke="#4338CA" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text active">گروه‌های درسی</p>
+          </div>
+        </a>
+        <a id="menuProfessors" href="/admin/professors">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.3334 8.33337V13.3334M5.00004 10.4167V13.3334C5.00004 13.9964 5.52682 14.6323 6.46451 15.1011C7.40219 15.57 8.67396 15.8334 10 15.8334C11.3261 15.8334 12.5979 15.57 13.5356 15.1011C14.4733 14.6323 15 13.9964 15 13.3334V10.4167M17.8501 9.1018C17.9993 9.03599 18.1259 8.92786 18.2142 8.7908C18.3025 8.65375 18.3487 8.49379 18.347 8.33075C18.3453 8.16771 18.2958 8.00874 18.2047 7.87354C18.1136 7.73834 17.9848 7.63285 17.8342 7.57013L10.6917 4.3168C10.4746 4.21776 10.2387 4.1665 10.0001 4.1665C9.76142 4.1665 9.52554 4.21776 9.30841 4.3168L2.16674 7.5668C2.01838 7.63178 1.89217 7.73858 1.80355 7.87415C1.71492 8.00971 1.66772 8.16817 1.66772 8.33014C1.66772 8.4921 1.71492 8.65055 1.80355 8.78612C1.89217 8.92169 2.01838 9.02849 2.16674 9.09347L9.30841 12.3501C9.52554 12.4492 9.76142 12.5004 10.0001 12.5004C10.2387 12.5004 10.4746 12.4492 10.6917 12.3501L17.8501 9.1018Z" stroke="#475569" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">اساتید</p>
+          </div>
+        </a>
+        <a id="menuStudents" href="/admin/students">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 17.5C15 15.7319 14.2976 14.0362 13.0473 12.786C11.7971 11.5357 10.1014 10.8333 8.33329 10.8333M8.33329 10.8333C6.56518 10.8333 4.86949 11.5357 3.61925 12.786C2.36901 14.0362 1.66663 15.7319 1.66663 17.5M8.33329 10.8333C10.6345 10.8333 12.5 8.96785 12.5 6.66667C12.5 4.36548 10.6345 2.5 8.33329 2.5C6.03211 2.5 4.16663 4.36548 4.16663 6.66667C4.16663 8.96785 6.03211 10.8333 8.33329 10.8333ZM18.3333 16.6668C18.3333 13.8585 16.6667 11.2502 15 10.0002C15.5478 9.58914 15.9859 9.0494 16.2755 8.42872C16.565 7.80804 16.6971 7.12555 16.66 6.44166C16.6229 5.75777 16.4178 5.09357 16.0629 4.50783C15.7079 3.92209 15.2141 3.43288 14.625 3.0835" stroke="#475569" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">دانشجویان</p>
+          </div>
+        </a>
+        <a id="menuSettings" href="/admin/settings">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.99996 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 9.99996 7.5C8.61925 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61925 12.5 9.99996 12.5Z" stroke="#475569" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M10 1.66667V3.33333M10 16.6667V18.3333M2.19333 3.19333L3.61 4.61M15.39 15.39L16.8067 16.8067M1.66667 10H3.33333M16.6667 10H18.3333M2.19333 16.8067L3.61 15.39M15.39 4.61L16.8067 3.19333" stroke="#475569" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">تنظیمات</p>
+          </div>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-container">
+        <div class="courses">
+          <div class="text-header">
+            <div class="text-container">
+              <h2>گروه‌های درسی</h2>
+              <p class="small-muted">مدیریت گروه‌های درسی و اساتید</p>
+            </div>
+            <button class="btn primary" id="openAddOfferingModal">+ افزودن گروه درسی</button>
+            <div></div>
+          </div>
+
+          <div id="loadingIndicator" style="display:none; text-align: center; padding: 20px;">
+            <p>بارگذاری گروه‌های درسی...</p>
+          </div>
+
+          <div id="errorBanner" style="display:none; background: #fee; color: #c00; padding: 12px; border-radius: 4px; margin: 10px 0; border: 1px solid #fcc;">
+            <strong>خطا:</strong> <span id="errorText"></span>
+          </div>
+
+          <section class="table-section">
+            <table class="offerings-table">
+              <thead>
+                <tr>
+                  <th>درس</th>
+                  <th>استاد</th>
+                  <th>ترم</th>
+                  <th>گروه</th>
+                  <th>ظرفیت</th>
+                  <th>کلاس</th>
+                  <th>تاریخ امتحان</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="offeringsContainer">
+              </tbody>
+            </table>
+            <div id="emptyStateOffering" class="empty-state-courses">
+              <img src="../static/images/no-content.png">
+              <h4 class="empty-state-title">گروه درسی یافت نشد</h4>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Offering Modal -->
+  <div id="addOfferingModal" class="modal">
+    <div class="modal-content">
+      <span id="closeOfferingModal" class="close">&times;</span>
+      <h3>افزودن گروه درسی جدید</h3>
+      <form id="addOfferingForm" class="course-form">
+        <div class="input-container">
+          <label>درس</label>
+          <select id="o-course" required>
+            <option value="">یک درس را انتخاب کنید</option>
+          </select>
+        </div>
+
+        <div class="input-container">
+          <label>استاد</label>
+          <select id="o-professor" required>
+            <option value="">یک استاد را انتخاب کنید</option>
+          </select>
+        </div>
+
+        <div class="input-container">
+          <label>ترم</label>
+          <select id="o-semester" required>
+            <option value="">یک ترم را انتخاب کنید</option>
+          </select>
+        </div>
+
+        <div class="input-container">
+          <label>زمان‌بندی (روز و ساعت)</label>
+          <select id="o-slots" multiple required style="height: 100px;">
+            <option value="">زمان‌بندی را انتخاب کنید</option>
+          </select>
+          <small style="color: #999; display: block; margin-top: 4px;">Ctrl+کلیک برای انتخاب چندتایی</small>
+        </div>
+
+        <div class="input-container">
+          <label>ظرفیت</label>
+          <input id="o-capacity" type="number" placeholder="تعداد دانشجو" required min="1">
+        </div>
+
+        <div class="input-container">
+          <label>کلاس</label>
+          <input id="o-classroom" type="text" placeholder="مثال: تالار الف" required>
+        </div>
+
+        <div class="input-container">
+          <label>تاریخ امتحان</label>
+          <input id="o-exam-date" type="date" required>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn secondary" id="cancelOfferingModal">انصراف</button>
+          <button type="submit" class="btn primary">ذخیره</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" style="display: none;">
+    <strong id="toastTitle"></strong>
+    <p id="toastDesc"></p>
+  </div>
+
+  <script src="../static/js/sidebar-manager.js" defer></script>
+  <script src="../static/js/admin-course-offerings.js" defer></script>
+</body>
+
+</html>
