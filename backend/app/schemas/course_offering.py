@@ -18,16 +18,25 @@ class CourseOfferingCreate(CourseOfferingBase):
     slot_ids: list[UUID]
 
 class CourseOfferingUpdate(BaseModel):
-    course_id: UUID | None = None
     professor_id: UUID | None = None
-    semester_id: UUID | None = None
     capacity: int | None = None
     classroom: str | None = None
     exam_date: datetime | None = None
+    slot_ids: list[UUID] | None = None
 
 
 class CourseOfferingOut(CourseOfferingBase):
     id: UUID
+    group_number: int  # auto-generated, immutable
+    slot_ids: list[UUID] = []
+    course_name: str = ""
+    professor_name: str = ""
 
     class Config:
         from_attributes = True
+
+
+class CourseOfferingForStudent(CourseOfferingOut):
+    """Extended schema for student view with course/professor names for display."""
+    course_name: str = ""
+    professor_name: str = ""

@@ -12,10 +12,20 @@ class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+    role: str
 
 
 class RefreshRequest(BaseModel):
     refresh_token: str
+
+
+class UserCreate(BaseModel):
+    user_number: str
+    password: str
+    first_name: str
+    last_name: str
+    phone_number: str
+    national_number: str
 
 
 class UserOut(BaseModel):

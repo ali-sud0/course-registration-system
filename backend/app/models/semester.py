@@ -1,6 +1,6 @@
 # app/models/semester.py
 
-from sqlalchemy import Column, String, SmallInteger, Date
+from sqlalchemy import Column, String, SmallInteger, Date, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
@@ -16,3 +16,4 @@ class Semester(Base):
     end_date = Column(Date, nullable=True)
     min_units = Column(SmallInteger, nullable=True)
     max_units = Column(SmallInteger, nullable=True)
+    is_active = Column(Boolean, nullable=False, default=False)

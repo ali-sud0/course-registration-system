@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>درسینو - گروه‌های درسی (دانشجو)</title>
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+  <link rel="stylesheet" href="../static/css/courses.css">
+</head>
+
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="../static/images/logo.png" alt="لوگو" class="logo">
+        <div class="brand-title">درسینو</div>
+      </div>
+      <nav class="menu">
+        <a id="menuCourses" href="/students/courses">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.99996 5.83333V17.5M9.99996 5.83333C9.99996 4.94928 9.64877 4.10143 9.02365 3.47631C8.39853 2.85119 7.55068 2.5 6.66663 2.5H2.49996C2.27895 2.5 2.06698 2.5878 1.9107 2.74408C1.75442 2.90036 1.66663 3.11232 1.66663 3.33333V14.1667C1.66663 14.3877 1.75442 14.5996 1.9107 14.7559C2.06698 14.9122 2.27895 15 2.49996 15H7.49996C8.163 15 8.79889 15.2634 9.26773 15.7322C9.73657 16.2011 9.99996 16.837 9.99996 17.5M9.99996 5.83333C9.99996 4.94928 10.3511 4.10143 10.9763 3.47631C11.6014 2.85119 12.4492 2.5 13.3333 2.5H17.5C17.721 2.5 17.9329 2.5878 18.0892 2.74408C18.2455 2.90036 18.3333 3.11232 18.3333 3.33333V14.1667C18.3333 14.3877 18.2455 14.5996 18.0892 14.7559C17.9329 14.9122 17.721 15 17.5 15H12.5C11.8369 15 11.201 15.2634 10.7322 15.7322C10.2634 16.2011 9.99996 16.837 9.99996 17.5M13.3333 10H15M13.3333 6.66667H15M4.99996 10H6.66663M4.99996 6.66667H6.66663" stroke="#4338CA" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">دروس</p>
+          </div>
+        </a>
+        <a id="menuOfferedCourses" href="/students/course-offerings">
+          <div class="menu-item active">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.33333 2.5H16.6667C17.5871 2.5 18.3333 3.24619 18.3333 4.16667V15.8333C18.3333 16.7538 17.5871 17.5 16.6667 17.5H3.33333C2.41286 17.5 1.66667 16.7538 1.66667 15.8333V4.16667C1.66667 3.24619 2.41286 2.5 3.33333 2.5ZM3.33333 5H16.6667M3.33333 8.33333H16.6667M3.33333 11.6667H13.3333" stroke="#4338CA" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text active">دروس ارایه شده</p>
+          </div>
+        </a>
+        <a id="menuEnrollment" href="/students/enrollment">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 17.5C15 15.7319 14.2976 14.0362 13.0473 12.786C11.7971 11.5357 10.1014 10.8333 8.33329 10.8333M8.33329 10.8333C6.56518 10.8333 4.86949 11.5357 3.61925 12.786C2.36901 14.0362 1.66663 15.7319 1.66663 17.5M8.33329 10.8333C10.6345 10.8333 12.5 8.96785 12.5 6.66667C12.5 4.36548 10.6345 2.5 8.33329 2.5C6.03211 2.5 4.16663 4.36548 4.16663 6.66667C4.16663 8.96785 6.03211 10.8333 8.33329 10.8333ZM18.3333 16.6668C18.3333 13.8585 16.6667 11.2502 15 10.0002C15.5478 9.58914 15.9859 9.0494 16.2755 8.42872C16.565 7.80804 16.6971 7.12555 16.66 6.44166C16.6229 5.75777 16.4178 5.09357 16.0629 4.50783C15.7079 3.92209 15.2141 3.43288 14.625 3.0835" stroke="#475569" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">انتخاب واحد</p>
+          </div>
+        </a>
+        <a id="menuSchedule" href="/students/schedule">
+          <div class="menu-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.33333 4.16667H16.6667M6.66667 1.66667V6.66667M13.3333 1.66667V6.66667M3.33333 6.66667H16.6667C17.5871 6.66667 18.3333 7.41286 18.3333 8.33333V16.6667C18.3333 17.5871 17.5871 18.3333 16.6667 18.3333H3.33333C2.41286 18.3333 1.66667 17.5871 1.66667 16.6667V8.33333C1.66667 7.41286 2.41286 6.66667 3.33333 6.66667ZM3.33333 11.6667H7.5M10 11.6667H14.1667" stroke="#475569" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="menu-item-text">جدول هفتگی</p>
+          </div>
+        </a>
+      </nav>
+      <button id="logoutBtn" class="btn btn-logout">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.3333 14.1667L17.5 10M17.5 10L13.3333 5.83333M17.5 10H7.5M7.5 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V4.16667C2.5 3.72464 2.67559 3.30072 2.98816 2.98816C3.30072 2.67559 3.72464 2.5 4.16667 2.5H7.5" stroke="#EF4444" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>خروج از حساب</span>
+      </button>
+    </aside>
+
+    <main class="main-content">
+      <section class="navbar">
+        <span id="navbarTitle">سلام </span>
+        <label>خوش آمدید!</label>
+      </section>
+
+      <div class="main-body">
+        <div class="text-header">
+          <div class="text-container">
+            <h2>گروه‌های درسی</h2>
+            <p class="small-muted">دروس برای این ترم را مشاهده کنید</p>
+          </div>
+        </div>
+
+        <div id="loadingIndicator" style="display:none; text-align: center; padding: 20px;">
+          <p>بارگذاری گروه‌های درسی...</p>
+        </div>
+
+        <div id="errorBanner" style="display:none; background: #fee; color: #c00; padding: 12px; border-radius: 4px; margin: 10px 0; border: 1px solid #fcc;">
+          <strong>خطا:</strong> <span id="errorText"></span>
+        </div>
+
+        <section class="table-section">
+          <table class="offerings-table">
+            <thead>
+              <tr class="table-head">
+                <td>درس</td>
+                <td>استاد</td>
+                <td>ترم</td>
+                <td>گروه</td>
+                <td>ظرفیت</td>
+                <td>کلاس</td>
+                <td>تاریخ امتحان</td>
+              </tr>
+            </thead>
+            <tbody id="offeringsContainer">
+            </tbody>
+          </table>
+          <div id="emptyStateOffering" class="empty-state-courses">
+            <img src="../static/images/no-content.png">
+            <h4 class="empty-state-title">گروه درسی یافت نشد</h4>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" style="display: none;">
+    <strong id="toastTitle"></strong>
+    <p id="toastDesc"></p>
+  </div>
+
+  <script src="../static/js/sidebar-manager.js" defer></script>
+  <script src="../static/js/students-course-offerings.js" defer></script>
+</body>
+
+</html>

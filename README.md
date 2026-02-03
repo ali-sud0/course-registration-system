@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-# course-registration-system
-A web-based system for course registration and management
-=======
 # Course Registration System — Backend Setup Guide
 
 ## Overview
@@ -761,4 +757,4 @@ See the LICENSE file in the project root.
 **System Version:** 1.0  
 **Python Version Required:** 3.10+  
 **PostgreSQL Version Required:** 12+
->>>>>>> Stashed changes
+=======

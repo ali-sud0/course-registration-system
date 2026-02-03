@@ -5,7 +5,7 @@ from datetime import datetime
 
 from app.schemas.auth import LoginRequest, TokenResponse, RefreshRequest
 from app.core.db import get_db
-from app.models.user import User
+from app.models.user import User, UserRole
 from app.models.token_metadata import TokenMetadata
 from app.core import security
 
@@ -42,6 +42,7 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
     db.commit()
 
     return {
+        "role": UserRole(user.role),
         "access_token": access,
         "refresh_token": refresh,
         "token_type": "bearer",
@@ -74,4 +75,5 @@ def refresh_token(req: RefreshRequest, db: Session = Depends(get_db)):
         "access_token": new_access,
         "refresh_token": req.refresh_token,
         "token_type": "bearer",
+        "role": "undefined"
     }

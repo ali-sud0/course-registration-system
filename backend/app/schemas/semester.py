@@ -9,6 +9,7 @@ class SemesterBase(BaseModel):
     end_date: date | None = None
     min_units: int | None = None
     max_units: int | None = None
+    is_active: bool = False
 
 # Schema for creating a semester
 class SemesterCreate(SemesterBase):
@@ -21,6 +22,7 @@ class SemesterUpdate(BaseModel):
     end_date: date | None = None
     min_units: int | None = None
     max_units: int | None = None
+    is_active: bool | None = None
 
 # Schema for returning semester info
 class SemesterOut(SemesterBase):
