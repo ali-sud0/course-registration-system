@@ -39,25 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (replacePageWithNamespace('admin')) return;
 		// Rewrite any links remaining on the page to point to /admin/*
 		rewritePageLinksToNamespace('admin');
-
-		// Enforce admin-only navigation: if user is on a non-admin page, send to admin home
-		const allowedPrefixes = ['/admin', '/static', '/auth', '/login', '/'];
-		if (!allowedPrefixes.some(p => location.pathname.startsWith(p))) {
-			location.replace('/admin/courses');
-			return;
-		}
 	} else if (normalized === 'professor') {
 		if (replacePageWithNamespace('professors')) return;
 		rewritePageLinksToNamespace('professors');
 	} else if (normalized === 'student') {
 		if (replacePageWithNamespace('students')) return;
 		rewritePageLinksToNamespace('students');
-
-		// Ensure students don't land on admin pages
-		if (location.pathname.startsWith('/admin')) {
-			location.replace('/students/courses');
-			return;
-		}
 	}
 });
 

@@ -230,29 +230,6 @@ function renderEnrolledList(enrollments, courseMap = {}) {
   });
 }
 
-function translateErrorDetail(detail){
-  const s = typeof detail === 'string' ? detail : JSON.stringify(detail);
-  if (!s) return 'خطا در حذف درس';
-  
-  // Check for minimum units drop errors first (more specific)
-  if (s.includes('would fall below minimum units') || s.includes('fall below minimum')) {
-    return 'نمی‌توانید این درس را حذف کنید زیرا حداقل واحدهای الزامی را نقض خواهد کرد';
-  }
-  
-  // Then check other drop errors
-  if (s.includes('Can only drop') || s.includes('Can only remove')) {
-    return 'فقط می‌توانید درس‌های ترم جاری را حذف کنید';
-  }
-  
-  if (s.includes('Enrollment not found')) return 'ثبت‌نام یافت نشد';
-  if (s.includes('Course offering not found')) return 'گروه درسی یافت نشد';
-  if (s.includes('Cannot') || s.includes('not allowed')) return 'عملیات مجاز نیست';
-  
-  // fallback: if contains English letters, prepend a Persian label
-  if (/[A-Za-z]/.test(s)) return 'خطا: ' + s;
-  return s;
-}
-
 async function dropCourse(enrollmentId) {
   if (!confirm('آیا از حذف این درس مطمئن هستید؟')) return;
 
@@ -274,9 +251,7 @@ async function dropCourse(enrollmentId) {
         detail = `خطا (${resp.status})`;
       }
       console.error('Drop failed', resp.status, detail);
-      // translate common backend English messages to Persian
-      const friendly = translateErrorDetail(detail);
-      showToast(friendly, 'error');
+      showToast(detail, 'error');
       return;
     }
     showToast('درس با موفقیت حذف شد', 'success');

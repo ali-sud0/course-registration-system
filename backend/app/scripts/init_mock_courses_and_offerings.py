@@ -75,8 +75,7 @@ def init_mock_courses_and_offerings():
         # Get all courses and professors
         courses = db.query(Course).all()
         professors = db.query(User).filter(User.role == UserRole.Professor).all()
-        # Use active/current semester (seed_semester now creates a current active semester)
-        semester = db.query(Semester).filter(Semester.is_active == True).first()
+        semester = db.query(Semester).first()
 
         if not courses:
             print("❌ No courses found")

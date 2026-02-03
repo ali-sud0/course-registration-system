@@ -7,7 +7,6 @@ from app.core.db import get_db
 from app.dependencies import get_current_user, require_role
 from app.schemas.auth import UserOut, UserCreate
 from app.models.user import User, UserRole
-from app.models.enrollment import Enrollment, EnrollmentStatus
 from app.core.security import hash_password
 
 router = APIRouter(prefix="/me", tags=["me"])

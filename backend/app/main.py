@@ -19,25 +19,13 @@ import app.models
 Base.metadata.create_all(bind=engine)
 
 
-# Startup event with tests
+# Startup event
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     print("\n" + "="*70)
     print("SERVER STARTED - Course Registration System Backend")
     print("="*70)
-    
-    # Run tests
-    try:
-        from app.tests.test_runner import run_all_tests
-        print("\nRunning startup tests...")
-        success = run_all_tests()
-        if not success:
-            print("\n⚠️  Some tests failed, but server is still running.")
-    except Exception as e:
-        print(f"\n⚠️  Error running tests: {e}")
-        import traceback
-        traceback.print_exc()
     
     yield
     

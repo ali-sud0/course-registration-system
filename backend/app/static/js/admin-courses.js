@@ -211,24 +211,14 @@ function renderPrereqs(){
     const main = courses.find(c=>c.id===p.course_id)?.name || p.course_id;
     const pre = courses.find(c=>c.id===p.prerequisite_course_id)?.name || p.prerequisite_course_id;
     const tr = document.createElement('tr');
-    tr.className = 'table-body';
     tr.innerHTML = `
       <td>${escapeHtml(main)}</td>
       <td>${escapeHtml(pre)}</td>
-      <td>
-        <button class="more-actions-prerequires" data-id="${p.id}" style="position: relative;">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="8" cy="2" r="1.5" fill="#6B7280"/>
-            <circle cx="8" cy="8" r="1.5" fill="#6B7280"/>
-            <circle cx="8" cy="14" r="1.5" fill="#6B7280"/>
-          </svg>
-        </button>
-      </td>
+      <td><button class="btn-delete-prereq" data-id="${p.id}">حذف</button></td>
     `;
     container.appendChild(tr);
   });
 }
-
 
 async function createPrereq(payload){
   const resp = await fetch(BASE_URL + '/prerequisites/', {
@@ -358,9 +348,8 @@ addPrerequireForm.addEventListener('submit', async (e)=>{
 
 // prereq delete button handler
 document.addEventListener('click', (e)=>{
-  if (e.target.classList.contains('more-actions-prerequires') || e.target.closest('.more-actions-prerequires')){
-    const btn = e.target.closest('.more-actions-prerequires');
-    const id = btn.getAttribute('data-id');
+  if (e.target.classList.contains('btn-delete-prereq')){
+    const id = e.target.getAttribute('data-id');
     deletePrereq(id);
   }
 });

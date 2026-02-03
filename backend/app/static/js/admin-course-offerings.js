@@ -187,7 +187,6 @@ function renderOfferings() {
     // Get semester name; fallback to '-' if not found
     const semesterName = semesterMap[o.semester_id] || o.semester_name || '-';
     const tr = document.createElement('tr');
-    tr.className = 'table-body';
     tr.innerHTML = `
       <td>${o.course_name}</td>
       <td>${o.professor_name}</td>
@@ -196,15 +195,7 @@ function renderOfferings() {
       <td>${o.capacity}</td>
       <td>${o.classroom}</td>
       <td>${o.exam_date || '-'}</td>
-      <td>
-        <button class="more-actions" data-id="${o.id}" style="position: relative;">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="8" cy="2" r="1.5" fill="#6B7280"/>
-            <circle cx="8" cy="8" r="1.5" fill="#6B7280"/>
-            <circle cx="8" cy="14" r="1.5" fill="#6B7280"/>
-          </svg>
-        </button>
-      </td>
+      <td><button class="btn-delete-offering" data-id="${o.id}">حذف</button></td>
     `;
     offeringsContainer.appendChild(tr);
   });
@@ -308,9 +299,8 @@ addOfferingForm.addEventListener('submit', async (e) => {
 
 // Delete button handler
 document.addEventListener('click', (e) => {
-  const btn = e.target.closest('.more-actions');
-  if (btn) {
-    const id = btn.getAttribute('data-id');
+  if (e.target.classList.contains('btn-delete-offering')) {
+    const id = e.target.getAttribute('data-id');
     deleteOffering(id);
   }
 });

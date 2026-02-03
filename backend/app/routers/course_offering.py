@@ -183,20 +183,19 @@ def list_offerings_for_current_term(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Student-facing: list course offerings for the active semester (or all if no active semester) with optional search."""
+    """Student-facing: list course offerings for the active (current) semester with optional search."""
     try:
         active_semester = get_active_semester(db)
-        
+        if not active_semester:
+            return []
+
         query = (
             db.query(CourseOffering, Course.name.label("course_name"), User.first_name, User.last_name, Semester.name.label("semester_name"))
-            .outerjoin(Course, Course.id == CourseOffering.course_id)
-            .outerjoin(User, User.id == CourseOffering.professor_id)
-            .outerjoin(Semester, Semester.id == CourseOffering.semester_id)
+            .join(Course, Course.id == CourseOffering.course_id)
+            .join(User, User.id == CourseOffering.professor_id)
+            .join(Semester, Semester.id == CourseOffering.semester_id)
+            .filter(CourseOffering.semester_id == active_semester.id)
         )
-        
-        # If there is an active semester, filter by it; otherwise show all
-        if active_semester:
-            query = query.filter(CourseOffering.semester_id == active_semester.id)
 
         if course_name:
             query = query.filter(Course.name.ilike(f"%{course_name}%"))

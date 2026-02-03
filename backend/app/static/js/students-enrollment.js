@@ -56,7 +56,7 @@ async function fetchOfferings(){
     if (loadingIndicator) loadingIndicator.style.display='block';
     const token = localStorage.getItem('accessToken');
     if (!token){ showError('توکن وارد نشده است. لطفا وارد شوید.'); return; }
-    const resp = await fetch(BASE_URL + '/course-offerings/', { headers: authHeaders() });
+    const resp = await fetch(BASE_URL + '/course-offerings/for-current-term', { headers: authHeaders() });
     if (!resp.ok){ showError('بارگذاری دروس ناموفق'); return; }
     offerings = await resp.json();
     hideError();
@@ -66,7 +66,7 @@ async function fetchOfferings(){
 
 async function fetchEnrollments(){
   try{
-    const resp = await fetch(BASE_URL + '/enrollments/me', { headers: authHeaders() });
+    const resp = await fetch(BASE_URL + '/me/enrollments', { headers: authHeaders() });
     if (!resp.ok) return;
     enrollments = await resp.json();
   }catch(e){ console.error('enrollment fetch error', e); }
@@ -190,9 +190,7 @@ async function enrollCourse(){
     });
     if (!resp.ok){ 
       const err = await resp.json().catch(()=>({detail:'خطا'}));
-      const rawDetail = err && err.detail ? err.detail : (err || 'خطا');
-      const friendly = translateErrorDetail(rawDetail);
-      showToast('error', 'خطا', friendly);
+      showToast('error', 'خطا', err.detail || 'ثبت‌نام ناموفق'); 
       return; 
     }
     showToast('success', 'موفق', 'درس با موفقیت انتخاب شد');
@@ -200,34 +198,7 @@ async function enrollCourse(){
     await fetchEnrollments();
     renderOfferings();
     showPrerequisiteAlert(selectedOfferingId);
-  }catch(e){ showToast('error', 'خطا', 'خطا در برقراری ارتباط: ' + (e && e.message ? e.message : '')); }
-}
-
-function translateErrorDetail(detail){
-  // detail may be a string or an array/object from backend
-  const toStr = (d)=> typeof d === 'string' ? d : (Array.isArray(d) ? d.map(x=> x.msg || JSON.stringify(x)).join('، ') : JSON.stringify(d));
-  const s = toStr(detail);
-  if (!s) return 'ثبت‌نام ناموفق';
-
-  if (s.includes('Course offering not found')) return 'گروه درسی یافت نشد';
-  if (s.includes('Semester not found')) return 'ترم یافت نشد';
-  if (s.includes('Course capacity is full')) return 'ظرفیت این درس پر شده است';
-  if (s.includes('Already enrolled in this course')) return 'شما قبلاً این درس را اخذ کرده‌اید';
-  if (s.includes('Prerequisite course not passed')) return 'پیش‌نیاز این درس گذرانده نشده است';
-  if (s.includes('Schedule time conflict detected')) return 'تداخل زمانی با سایر دروس وجود دارد';
-  if (s.includes('Maximum unit limit exceeded')){
-    // extract numbers if present
-    const m = s.match(/max:\s*(\d+)[^\d]*(\d+)/);
-    return 'حداکثر واحد مجاز رعایت نشده';
-  }
-  if (s.includes('Cannot drop') || s.includes('Can only drop') || s.includes('Can only remove')) return 'عملیات مجاز نیست برای ترم جاری';
-  if (s.includes('Enrollment not found')) return 'ثبت‌نام یافت نشد';
-  if (s.includes('Course not found')) return 'درس یافت نشد';
-  if (s.includes('Professor not found')) return 'استاد یافت نشد';
-
-  // fallback: if backend returns an English sentence, show a generic Persian message
-  if (/[A-Za-z]/.test(s)) return 'خطا: ' + s;
-  return s;
+  }catch(e){ showToast('error', 'خطا', e.message); }
 }
 
 function showPrerequisiteAlert(offeringId){

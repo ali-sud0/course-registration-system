@@ -21,7 +21,7 @@ async function fetchOfferings(){
     if (loadingIndicator) loadingIndicator.style.display='block';
     const token = localStorage.getItem('accessToken');
     if (!token){ showError('توکن وارد نشده است. لطفا وارد شوید.'); return; }
-    const resp = await fetch(BASE_URL + '/course-offerings/', { headers: authHeaders() });
+    const resp = await fetch(BASE_URL + '/course-offerings/for-current-term', { headers: authHeaders() });
     if (!resp.ok){ const t = await resp.text().catch(()=>resp.statusText); showError('بارگذاری گروه‌های درسی ناموفق: '+resp.status+' '+t); return; }
     const offerings = await resp.json();
     hideError(); renderOfferings(offerings);

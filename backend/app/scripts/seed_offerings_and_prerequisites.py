@@ -72,58 +72,45 @@ def seed_offerings_and_prerequisites():
 
         # Create course offerings (assign courses to professors with schedule slots)
         offerings_created = 0
-
-        # For each course, ensure at least one offering exists for the active semester.
-        for i, course in enumerate(courses):
-            existing_for_course = db.query(CourseOffering).filter(
-                CourseOffering.course_id == course.id,
-                CourseOffering.semester_id == semester.id,
-            ).count()
-
-            if existing_for_course > 0:
-                # skip if already seeded
-                continue
-
-            # Cycle through available professors
-            professor = professors[i % len(professors)]
-
-            # Choose two schedule slots deterministically so offerings have schedule
-            if len(schedule_slots) >= 2:
-                slot_indices = [(i * 2) % len(schedule_slots), (i * 2 + 1) % len(schedule_slots)]
-            elif len(schedule_slots) == 1:
-                slot_indices = [0]
-            else:
-                slot_indices = []
-
-            offering = CourseOffering(
-                id=gen_uuid(),
-                course_id=course.id,
-                professor_id=professor.id,
-                semester_id=semester.id,
-                group_number=1,
-                capacity=30,
-            )
-
-            db.add(offering)
-            db.flush()  # Flush to get the offering ID
-
-            # Assign schedule slots to this offering
-            for slot_idx in slot_indices:
-                slot = schedule_slots[slot_idx]
-                offering_slot = CourseOfferingScheduleSlot(
-                    id=gen_uuid(),
-                    course_offering_id=offering.id,
-                    schedule_slot_id=slot.id,
-                )
-                db.add(offering_slot)
-
-            offerings_created += 1
-
-        if offerings_created > 0:
-            db.commit()
-            print(f"✅ Created {offerings_created} new course offering(s) for the active semester")
+        existing_offerings = db.query(CourseOffering).count()
+        
+        if existing_offerings > 0:
+            print(f"⚠️  {existing_offerings} course offerings already exist. Skipping offerings creation.")
         else:
-            print("⚠️  No new course offerings needed; active semester already has offerings for all courses")
+            for i, course in enumerate(courses):
+                # Cycle through available professors
+                professor = professors[i % len(professors)]
+                
+                # Cycle through schedule slots (2 slots per offering)
+                slot_indices = [(i * 2) % len(schedule_slots), (i * 2 + 1) % len(schedule_slots)]
+                
+                offering = CourseOffering(
+                    id=gen_uuid(),
+                    course_id=course.id,
+                    professor_id=professor.id,
+                    semester_id=semester.id,
+                    capacity=30,
+                    enrolled_count=0,
+                    semester_status="planned"
+                )
+                
+                db.add(offering)
+                db.flush()  # Flush to get the offering ID
+                
+                # Assign schedule slots to this offering
+                for slot_idx in slot_indices:
+                    slot = schedule_slots[slot_idx]
+                    offering_slot = CourseOfferingScheduleSlot(
+                        id=gen_uuid(),
+                        course_offering_id=offering.id,
+                        schedule_slot_id=slot.id
+                    )
+                    db.add(offering_slot)
+                
+                offerings_created += 1
+            
+            db.commit()
+            print(f"✅ Created {offerings_created} course offering(s)")
 
         # Create prerequisite relationships
         prerequisites_created = 0
