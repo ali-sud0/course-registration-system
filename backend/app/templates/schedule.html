@@ -107,36 +107,116 @@
     }
 
     .enrolled-list {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      width: 100%;
     }
 
     .enrolled-item {
-      padding: 12px;
-      border-bottom: 1px solid #e5e7eb;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
-    .enrolled-item:last-child {
-      border-bottom: none;
+    .enrolled-item:hover {
+      border-color: #4338ca;
+      box-shadow: 0 4px 12px rgba(67, 56, 202, 0.08);
+      transform: translateY(-2px);
     }
 
     .enrolled-item .info {
-      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .enrolled-item .name {
       font-weight: 600;
       color: #1f2937;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .course-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .meta-label {
+      font-weight: 500;
+      color: #374151;
+      min-width: 70px;
+    }
+
+    .meta-value {
+      color: #111827;
     }
 
     .enrolled-item .time {
       font-size: 13px;
       color: #6b7280;
+    }
+
+    .enrolled-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      padding-top: 12px;
+      border-top: 1px solid #f3f4f6;
+    }
+
+    .enrolled-item .drop-btn {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: 6px;
+      margin: 0;
+      background: #ef4444;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .enrolled-item .drop-btn:hover {
+      background: #dc2626;
+    }
+
+    .empty-enrolled-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: #6b7280;
+      background: white;
+      border: 2px dashed #e5e7eb;
+      border-radius: 12px;
+    }
+
+    .empty-enrolled-state h3 {
+      color: #374151;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .empty-enrolled-state p {
+      color: #9ca3af;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -242,6 +322,7 @@
   </div>
 
   <div id="toast" class="toast" style="display:none;"></div>
+  <script src="../static/js/logout.js"></script>
   <script src="../static/js/schedule.js"></script>
 </body>
 
