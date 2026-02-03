@@ -7,7 +7,7 @@ const togglePassword = document.getElementById('togglePassword');
 const eyeVisible = document.getElementById('eyeVisible');
 const eyeHidden = document.getElementById('eyeHidden');
 
-const BASE_URL = 'http://127.0.0.1:8023'; // آدرس سرور واقعی
+const BASE_URL = 'http://127.0.0.1:8000'; // آدرس سرور واقعی
 
 // نمایش/مخفی کردن رمز
 if (togglePassword) {
@@ -57,9 +57,21 @@ if (loginBtn) {
       const data = await response.json();
 
       if (response.status === 200) {
-        // ورود موفق، ذخیره JWT و هدایت
+        // ورود موفق، ذخیره JWT و هدایت بر اساس نقش
         localStorage.setItem('accessToken', data.access_token);
-        window.location.href = 'courses.html';
+        try {
+          const payload = data.access_token.split('.')[1];
+          const role = JSON.parse(atob(payload)).role;
+          if (role === 'Admin') {
+            window.location.href = '/admin/courses';
+          } else if (role === 'Professor') {
+            window.location.href = '/professors/dashboard';
+          } else {
+            window.location.href = '/students/courses';
+          }
+        } catch (e) {
+          window.location.href = '/students/courses';
+        }
       } else if (response.status === 401) {
         showError(data.message || 'نام کاربری یا رمز عبور اشتباه است');
       } else {

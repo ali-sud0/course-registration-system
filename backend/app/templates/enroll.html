@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>درسینو - انتخاب واحد</title>
+  <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/components.css">
+  <link rel="stylesheet" href="../static/css/courses.css">
+  <style>
+    .enroll-list {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .enroll-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .enroll-card .meta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .course-name {
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .course-code {
+      color: #6b7280;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="../static/images/logo.png" alt="لوگو" class="logo">
+        <div class="brand-title">درسینو</div>
+      </div>
+      <nav class="menu">
+        <a id="menuCourses" href="/page/courses">
+          <div class="menu-item">
+            <p class="menu-item-text">دروس</p>
+          </div>
+        </a>
+        <a id="menuProfessors" href="/page/professors">
+          <div class="menu-item">
+            <p class="menu-item-text">اساتید</p>
+          </div>
+        </a>
+        <a id="menuStudents" href="/page/students">
+          <div class="menu-item">
+            <p class="menu-item-text">دانشجویان</p>
+          </div>
+        </a>
+        <a id="menuEnroll" href="/students/enrollment">
+          <div class="menu-item active">
+            <p class="menu-item-text active">انتخاب واحد</p>
+          </div>
+        </a>
+      </nav>
+      <button id="logoutBtn" class="btn btn-logout">خروج از حساب</button>
+    </aside>
+
+    <main class="main-content">
+      <section class="navbar">
+        <span id="navbarTitle">سلام </span>
+        <label>انتخاب و ثبت دروس</label>
+      </section>
+
+      <div class="main-body">
+        <div class="text-header">
+          <div class="text-container">
+            <h2>انتخاب واحد</h2>
+            <p class="small-muted">لیست گروه‌های ارائه‌شده برای ترم جاری — برای ثبت روی دکمه ثبت کلیک کنید</p>
+          </div>
+        </div>
+
+        <div class="enroll-list" id="enrollList">
+          <!-- Offerings will be rendered here -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" style="display:none;"></div>
+  <script src="../static/js/enroll.js"></script>
+</body>
+
+</html>
